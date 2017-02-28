@@ -16,13 +16,11 @@ public class User {
     }
 
     public void addAccount(Account account) {
-        accounts.addFirst(account);
+        accounts.add(account);
     }
     public void deleteAccount(Account account) {
         accounts.remove(account);
     }
-
-
 
     public String getName() {
         return name;
@@ -34,10 +32,6 @@ public class User {
 
     public LinkedList<Account> getAccounts() {
         return accounts;
-    }
-
-    public void setAccounts(LinkedList<Account> accounts) {
-        this.accounts = accounts;
     }
 
     public String getPassword() {

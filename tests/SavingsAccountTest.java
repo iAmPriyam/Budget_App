@@ -12,5 +12,4 @@ public class SavingsAccountTest {
         test.capitalizeInterest();
         assertEquals(1060.90,test.getAccountBalance(),0.001);
     }
-
 }

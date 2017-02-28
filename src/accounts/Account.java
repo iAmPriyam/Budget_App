@@ -1,18 +1,18 @@
 package accounts;
 
-import expanses.Expanse;
+import expenses.Expense;
 
 import java.util.LinkedList;
 
 public class Account {
     private String accountName;
     private double accountBalance;
-    private LinkedList<Expanse> expansesList;
+    private LinkedList<Expense> expensesList;
 
     public Account(String accountName, double accountBalance) {
         this.accountName = accountName;
         this.accountBalance = accountBalance;
-        expansesList = new LinkedList<>();
+        expensesList = new LinkedList<>();
     }
     public void transferMoney(double money, Account targetAccount) {
         targetAccount.increaseAccountBalance(money);
@@ -25,6 +25,16 @@ public class Account {
     public void reduceAccountBalance(double expanse) {
         accountBalance -= expanse;
     }
+
+    public void addExpense(Expense expense) {
+        expensesList.add(expense);
+        this.reduceAccountBalance(expense.getPrice());
+    }
+
+    public LinkedList<Expense> getExpensesList() {
+        return expensesList;
+    }
+
     public String getAccountName() {
         return accountName;
     }

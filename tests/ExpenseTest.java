@@ -1,20 +1,20 @@
 import org.junit.Test;
-import expanses.*;
+import expenses.*;
 
 import static org.junit.Assert.*;
 
-public class ExpanseTest {
+public class ExpenseTest {
     @Test
     public void setCategory() throws Exception {
-        Expanse test = new Expanse("expanse",150,"food");
-        ExpanseCategory newCategory = new ExpanseCategory("education");
+        Expense test = new Expense("expense",150,"food");
+        ExpenseCategory newCategory = new ExpenseCategory("education");
         test.setCategory(newCategory);
         assertEquals("education",test.getCategory().getName());
     }
 
     @Test
     public void setCategory1() throws Exception {
-        Expanse test = new Expanse("expanse",150,"food");
+        Expense test = new Expense("expense",150,"food");
         test.setCategory("education");
         assertEquals("education",test.getCategory().getName());
     }

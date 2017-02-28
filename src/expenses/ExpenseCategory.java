@@ -1,8 +1,8 @@
-package expanses;
+package expenses;
 
-public class ExpanseCategory {
+public class ExpenseCategory {
     private String name;
-    public ExpanseCategory(String name) {
+    public ExpenseCategory(String name) {
         this.name = name;
     }
 
