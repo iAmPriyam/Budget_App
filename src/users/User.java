@@ -7,12 +7,20 @@ import java.util.LinkedList;
 public class User {
     private String name;
     private LinkedList<Account> accounts;
-    private String password;
+    private double monthlyBudget;
 
-    public User(String name, String password){
+    public User(String name){
         this.name = name;
-        this.password = password;
         accounts = new LinkedList<>();
+        monthlyBudget = 0;
+    }
+
+    public double getMonthlyBudget() {
+        return monthlyBudget;
+    }
+
+    public void setMonthlyBudget(double money) {
+        this.monthlyBudget = money;
     }
 
     public void addAccount(Account account) {
@@ -32,13 +40,5 @@ public class User {
 
     public LinkedList<Account> getAccounts() {
         return accounts;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 }

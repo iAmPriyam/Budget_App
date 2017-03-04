@@ -8,7 +8,7 @@ public class UserTest {
 
     @Test
     public void addAndGetAccount() throws Exception {
-        User testUser = new User("Tom", "testUser");
+        User testUser = new User("Tom");
         Account accounts[] = new Account[2];
         accounts[0] = new Account("testAcc",1000);
         accounts[1] = new Account("testAcc2",1000);
@@ -22,7 +22,7 @@ public class UserTest {
 
     @Test
     public void deleteAccount() throws Exception {
-        User testUser = new User("Tom", "testUser");
+        User testUser = new User("Tom");
         Account accounts[] = new Account[2];
         accounts[0] = new Account("testAcc",1000);
         accounts[1] = new Account("testAcc2",1000);

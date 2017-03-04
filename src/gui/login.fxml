@@ -1,14 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+<?import com.jfoenix.controls.*?>
+<?import java.lang.*?>
 <?import javafx.scene.control.*?>
-
 <?import javafx.scene.layout.*?>
-
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.LoginController">
    <children>
-      <PasswordField fx:id="txtPassword" alignment="CENTER" layoutX="38.0" layoutY="67.0" promptText="Password" />
-      <Button fx:id="loginBtn" layoutX="111.0" layoutY="131.0" mnemonicParsing="false" onAction="#Login" text="Login" />
-      <Label fx:id="isConnected" layoutX="90.0" layoutY="14.0" prefHeight="27.0" prefWidth="136.0" text="Label" />
+      <Pane layoutX="11.0" layoutY="17.0" prefHeight="266.0" prefWidth="278.0">
+         <children>
+            <Label fx:id="isConnected" alignment="CENTER" layoutX="44.0" layoutY="25.0" prefHeight="31.0" prefWidth="190.0" text="Label">
+               <font>
+                  <Font name="Calibri Light" size="18.0" />
+               </font></Label>
+            <JFXPasswordField fx:id="txtPassword" alignment="CENTER" layoutX="22.0" layoutY="118.0" prefHeight="45.0" prefWidth="234.0" promptText="Password">
+               <font>
+                  <Font name="System Italic" size="17.0" />
+               </font>
+            </JFXPasswordField>
+            <JFXButton fx:id="loginBtn" buttonType="RAISED" layoutX="65.0" layoutY="189.0" onAction="#Login" prefHeight="39.0" prefWidth="148.0" ripplerFill="#bfe0d300" style="-fx-background-color: #2196F3;" text="Login" textAlignment="CENTER" textFill="WHITE" />
+            <JFXTextField fx:id="txtName" alignment="CENTER" layoutX="22.0" layoutY="68.0" prefHeight="35.0" prefWidth="234.0" promptText="Login" />
+         </children>
+      </Pane>
    </children>
 </AnchorPane>
