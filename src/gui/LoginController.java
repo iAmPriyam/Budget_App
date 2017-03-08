@@ -25,9 +25,10 @@ public class LoginController implements Initializable {
     @FXML
     public Label isConnected;
     @FXML
-    private PasswordField txtPassword;
-    @FXML
     private TextField txtName;
+    @FXML
+    private PasswordField txtPassword;
+
 
 
     @Override
@@ -42,31 +43,14 @@ public class LoginController implements Initializable {
     public void Login(ActionEvent event) {
         try {
             if(db.isPasswordCorrect(txtPassword.getText())) {
-                isConnected.setText("poprawne");
-
-                FXMLLoader loader = new FXMLLoader();
-
-                Parent parent = FXMLLoader.load(getClass().getResource("mainScene.fxml"));
-                Scene scene = new Scene(parent);
                 Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                FXMLLoader loader = new FXMLLoader();
+                Parent parent = loader.load(getClass().getResource("mainScene.fxml").openStream());
                 MainSceneController mainSceneController = (MainSceneController)loader.getController();
                 mainSceneController.GetUser(db.getUserData(txtName.getText()));
-                appStage.setScene(scene);
+                appStage.setTitle("BudgetApp");
+                appStage.setScene(new Scene(parent));
                 appStage.show();
-
-
-                /*
-                Stage primaryStage = new Stage();
-                FXMLLoader loader = new FXMLLoader();
-                Pane root = loader.load(getClass().getResource("mainScene.fxml").openStream());
-                MainSceneController mainSceneController = (MainSceneController)loader.getController();
-                mainSceneController.GetUser(txtPassword.getText());
-                primaryStage.setTitle("BudgetApp");
-                primaryStage.setScene(new Scene(root));
-                primaryStage.show();
-                */
-
-
             } else {
                 isConnected.setText("niepoprawne");
             }

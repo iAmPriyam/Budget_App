@@ -7,13 +7,20 @@ import java.util.LinkedList;
 public class Account {
     private String accountName;
     private double accountBalance;
+    private int id;
     private LinkedList<Expense> expensesList;
 
-    public Account(String accountName, double accountBalance) {
+    public Account(String accountName, double accountBalance, int id) {
         this.accountName = accountName;
         this.accountBalance = accountBalance;
+        this.id = id;
         expensesList = new LinkedList<>();
     }
+
+    public int getId() {
+        return id;
+    }
+
     public void transferMoney(double money, Account targetAccount) {
         targetAccount.increaseAccountBalance(money);
         this.reduceAccountBalance(money);

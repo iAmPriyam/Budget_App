@@ -1,34 +1,14 @@
 package expenses;
-
-
 import java.util.GregorianCalendar;
 
 public class Expense {
     private String name;
     private double price;
     private GregorianCalendar date;
-    private ExpenseCategory category;
 
-    public GregorianCalendar getDate() {
-        return date;
-    }
-
-    public void setDate(GregorianCalendar date) {
-        this.date = date;
-    }
-
-    public Expense(String name, double price, ExpenseCategory category) {
+    public Expense(String name, double price) {
         this.name = name;
         this.price = price;
-        this.category = category;
-        this.date = new GregorianCalendar();
-
-    }
-    public Expense(String name, double price, String category) {
-        this.name = name;
-        this.price = price;
-        ExpenseCategory cat = new ExpenseCategory(category);
-        this.category = cat;
         this.date = new GregorianCalendar();
     }
 
@@ -48,15 +28,11 @@ public class Expense {
         this.price = price;
     }
 
-    public ExpenseCategory getCategory() {
-        return category;
+    public GregorianCalendar getDate() {
+        return date;
     }
 
-    public void setCategory(ExpenseCategory category) {
-        this.category = category;
-    }
-    public void setCategory(String category) {
-        ExpenseCategory cat = new ExpenseCategory(category);
-        this.category = cat;
+    public void setDate(GregorianCalendar date) {
+        this.date = date;
     }
 }

@@ -1,10 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.effect.*?>
+<?import com.jfoenix.controls.*?>
+<?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.MainSceneController">
-   <center>
+   <top>
+      <MenuBar BorderPane.alignment="CENTER">
+         <menus>
+            <Menu mnemonicParsing="false" text="=">
+              <items>
+                  <MenuItem fx:id="menuAccounts" mnemonicParsing="false" text="Accounts" />
+                  <MenuItem fx:id="menuStats" mnemonicParsing="false" text="Monthly Statistics" />
+                  <MenuItem fx:id="menuPayments" mnemonicParsing="false" text="Payments" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem fx:id="menuSettings" mnemonicParsing="false" text="App Settings" />
+              </items>
+            </Menu>
+         </menus>
+      </MenuBar>
+   </top>
+   <left>
       <Label fx:id="userLbl" text="User Welcome" BorderPane.alignment="CENTER" />
+   </left>
+   <center>
+      <Pane prefHeight="361.0" prefWidth="255.0" BorderPane.alignment="CENTER">
+         <children>
+            <LineChart fx:id="monthlyBudgetChart" layoutX="7.0" layoutY="14.0" prefHeight="197.0" prefWidth="272.0">
+              <xAxis>
+                <CategoryAxis side="BOTTOM" fx:id="x" />
+              </xAxis>
+              <yAxis>
+                <NumberAxis fx:id="y" side="LEFT" />
+              </yAxis>
+            </LineChart>
+         </children>
+      </Pane>
    </center>
 </BorderPane>

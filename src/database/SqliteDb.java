@@ -1,11 +1,13 @@
 package database;
 
+import accounts.Account;
 import users.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedList;
 
 public class SqliteDb {
 
@@ -30,7 +32,7 @@ public class SqliteDb {
     public boolean isPasswordCorrect(String password) throws SQLException {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
-        String query = "select * from users where password = ?";
+        String query = "SELECT * FROM users WHERE password = ?";
         try {
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1,password);
@@ -52,21 +54,48 @@ public class SqliteDb {
     public User getUserData(String name) throws SQLException{
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
-        String query = "select * from users where name = ?";
+        String query = "SELECT * FROM users WHERE name = ?";
         try {
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1,name);
-
             resultSet = preparedStatement.executeQuery();
+
             if(resultSet.next()) {
-                //System.out.println(resultSet.getString("name"));
-                User user = new User(resultSet.getString("name"));
-                System.out.println(user.getName());
+                User user = new User(resultSet.getString("name"),resultSet.getInt("id"));
+                LinkedList<Account> accounts = this.getAccounts(user.getId());
+                user.setAccounts(accounts);
                 return user;
             }
             else {
                 return null;
             }
+        } catch (Exception e) {
+            System.out.println(e);
+            return null;
+        } finally {
+            preparedStatement.close();
+            resultSet.close();
+        }
+    }
+
+    private LinkedList<Account> getAccounts(int id) throws SQLException {
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        String query = "SELECT * FROM accounts where user_id = ?";
+        String userId = Integer.toString(id);
+        try {
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1,userId);
+            resultSet = preparedStatement.executeQuery();
+            LinkedList<Account> accounts = new LinkedList<>();
+            while (resultSet.next()) {
+                int accountId = resultSet.getInt("id");
+                String accountName = resultSet.getString("name");
+                double accountBalance = resultSet.getDouble("balance");
+                Account account = new Account(accountName,accountBalance,accountId);
+                accounts.add(account);
+            }
+            return accounts;
         } catch (Exception e) {
             System.out.println(e);
             return null;

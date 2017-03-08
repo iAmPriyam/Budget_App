@@ -11,8 +11,8 @@ public class SavingsAccount extends Account {
     private GregorianCalendar openingDate;
 
 
-    public SavingsAccount(String accountName, double accountBalance, double interest, int capitalizationsPerYear, GregorianCalendar date) {
-        super(accountName,accountBalance);
+    public SavingsAccount(String accountName, double accountBalance,int id, double interest, int capitalizationsPerYear, GregorianCalendar date) {
+        super(accountName,accountBalance,id);
         this.interest = interest;
         this.capitalizationsPerYear = capitalizationsPerYear;
         this.openingDate = date;
