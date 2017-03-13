@@ -11,9 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import users.User;
 
 import java.io.IOException;
 import java.net.URL;
@@ -47,7 +45,7 @@ public class LoginController implements Initializable {
                 FXMLLoader loader = new FXMLLoader();
                 Parent parent = loader.load(getClass().getResource("mainScene.fxml").openStream());
                 MainSceneController mainSceneController = (MainSceneController)loader.getController();
-                mainSceneController.GetUser(db.getUserData(txtName.getText()));
+                mainSceneController.GetUser(db.getUserData(txtPassword.getText()));
                 appStage.setTitle("BudgetApp");
                 appStage.setScene(new Scene(parent));
                 appStage.show();

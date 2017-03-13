@@ -54,6 +54,10 @@ public class Account {
         return accountBalance;
     }
 
+    public void setExpensesList(LinkedList<Expense> expensesList) {
+        this.expensesList = expensesList;
+    }
+
     public void setAccountBalance(double accountBalance) {
         this.accountBalance = accountBalance;
     }

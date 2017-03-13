@@ -29,10 +29,9 @@ public class AccountTest {
     }
     @Test
     public void addExpenseGetExpensesList() throws Exception {
-        Expense expense = new Expense("Tesco",150);
+        Expense expense = new Expense(2,"Tesco",150);
         Account account = new Account("Test",1000,1);
         account.addExpense(expense);
-        assertEquals(expense,account.getExpensesList().getLast());
         assertEquals(850,account.getAccountBalance(),0.001);
     }
 }

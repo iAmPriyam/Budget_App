@@ -23,20 +23,15 @@
          </menus>
       </MenuBar>
    </top>
-   <left>
-      <Label fx:id="userLbl" text="User Welcome" BorderPane.alignment="CENTER" />
-   </left>
    <center>
       <Pane prefHeight="361.0" prefWidth="255.0" BorderPane.alignment="CENTER">
          <children>
-            <LineChart fx:id="monthlyBudgetChart" layoutX="7.0" layoutY="14.0" prefHeight="197.0" prefWidth="272.0">
-              <xAxis>
-                <CategoryAxis side="BOTTOM" fx:id="x" />
-              </xAxis>
-              <yAxis>
-                <NumberAxis fx:id="y" side="LEFT" />
-              </yAxis>
-            </LineChart>
+            <TreeTableView layoutX="14.0" layoutY="14.0" prefHeight="200.0" prefWidth="319.0">
+              <columns>
+                <TreeTableColumn prefWidth="130.0" text="Account" />
+                <TreeTableColumn prefWidth="115.0" text="Balance" />
+              </columns>
+            </TreeTableView>
          </children>
       </Pane>
    </center>

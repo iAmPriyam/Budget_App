@@ -15,13 +15,12 @@
                <font>
                   <Font name="Calibri Light" size="18.0" />
                </font></Label>
-            <JFXPasswordField fx:id="txtPassword" alignment="CENTER" layoutX="22.0" layoutY="118.0" prefHeight="45.0" prefWidth="234.0" promptText="Password">
+            <JFXPasswordField fx:id="txtPassword" alignment="CENTER" layoutX="22.0" layoutY="88.0" prefHeight="45.0" prefWidth="234.0" promptText="Password">
                <font>
-                  <Font name="System Italic" size="17.0" />
+                  <Font name="System Italic" size="19.0" />
                </font>
             </JFXPasswordField>
             <JFXButton fx:id="loginBtn" buttonType="RAISED" layoutX="65.0" layoutY="189.0" onAction="#Login" prefHeight="39.0" prefWidth="148.0" ripplerFill="#bfe0d300" style="-fx-background-color: #2196F3;" text="Login" textAlignment="CENTER" textFill="WHITE" />
-            <JFXTextField fx:id="txtName" alignment="CENTER" layoutX="22.0" layoutY="68.0" prefHeight="35.0" prefWidth="234.0" promptText="Login" />
          </children>
       </Pane>
    </children>

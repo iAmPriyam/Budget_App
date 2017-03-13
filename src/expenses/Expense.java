@@ -2,14 +2,21 @@ package expenses;
 import java.util.GregorianCalendar;
 
 public class Expense {
+    private int id;
     private String name;
     private double price;
     private GregorianCalendar date;
 
-    public Expense(String name, double price) {
+    public Expense(int id, String name, double price) {
+        this.id = id;
         this.name = name;
         this.price = price;
+
         this.date = new GregorianCalendar();
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getName() {
