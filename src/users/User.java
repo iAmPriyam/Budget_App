@@ -1,19 +1,18 @@
 package users;
 
 import accounts.Account;
-
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 public class User {
     private int id;
     private String name;
-    private LinkedList<Account> accounts;
+    private ArrayList<Account> accounts;
     private double monthlyBudget;
 
     public User(String name,int id){
         this.id = id;
         this.name = name;
-        accounts = new LinkedList<>();
+        accounts = new ArrayList<>();
         monthlyBudget = 0;
     }
 
@@ -33,7 +32,7 @@ public class User {
         this.id = id;
     }
 
-    public void setAccounts(LinkedList<Account> accounts) {
+    public void setAccounts(ArrayList<Account> accounts) {
         this.accounts = accounts;
     }
 
@@ -52,7 +51,7 @@ public class User {
         this.name = name;
     }
 
-    public LinkedList<Account> getAccounts() {
+    public ArrayList<Account> getAccounts() {
         return accounts;
     }
 }

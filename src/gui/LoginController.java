@@ -12,10 +12,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.net.URL;
-import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class LoginController implements Initializable {
@@ -26,8 +24,6 @@ public class LoginController implements Initializable {
     private TextField txtName;
     @FXML
     private PasswordField txtPassword;
-
-
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -52,9 +48,6 @@ public class LoginController implements Initializable {
             } else {
                 isConnected.setText("niepoprawne");
             }
-        } catch(SQLException e) {
-            System.out.println(e);
-            isConnected.setText("wyjatek");
         } catch (IOException e) {
             e.printStackTrace();
         }

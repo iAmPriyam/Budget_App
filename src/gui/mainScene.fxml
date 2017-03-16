@@ -26,10 +26,10 @@
    <center>
       <Pane prefHeight="361.0" prefWidth="255.0" BorderPane.alignment="CENTER">
          <children>
-            <TreeTableView layoutX="14.0" layoutY="14.0" prefHeight="200.0" prefWidth="319.0">
+            <TreeTableView fx:id="AccountsTable" layoutX="14.0" layoutY="14.0" prefHeight="325.0" prefWidth="557.0">
               <columns>
-                <TreeTableColumn prefWidth="130.0" text="Account" />
-                <TreeTableColumn prefWidth="115.0" text="Balance" />
+                <TreeTableColumn fx:id="AccountNameColumn" prefWidth="262.0" text="Account" />
+                <TreeTableColumn fx:id="AccountBalanceColumn" prefWidth="294.0" text="Balance" />
               </columns>
             </TreeTableView>
          </children>

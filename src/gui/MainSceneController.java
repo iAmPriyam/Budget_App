@@ -1,23 +1,25 @@
 package gui;
 
+import accounts.Account;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Label;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import users.User;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class MainSceneController implements Initializable{
+public class MainSceneController {
 
     User user;
-    @FXML
-    private Label userLbl;
+    ObservableList<Account> accounts = FXCollections.observableArrayList();
     @FXML
     private MenuItem menuSettings;
     @FXML
@@ -27,29 +29,26 @@ public class MainSceneController implements Initializable{
     @FXML
     private MenuItem menuAccounts;
     @FXML
-    private CategoryAxis x;
+    private TreeTableView AccountsTable;
     @FXML
-    private NumberAxis y;
+    private TreeTableColumn AccountNameColumn;
     @FXML
-    private LineChart<?,?> monthlyBudgetChart;
+    private TreeTableColumn AccountBalanceColumn;
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        //do sth here
-    }
+
     public void GetUser(User user) {
         if(user!=null) {
-            userLbl.setText(user.getName());
+
             this.user = user;
-            this.fillChart();
+            this.fillData();
         } else {
-            userLbl.setText("zjebawszy cos");
+
         }
     }
-    private void fillChart() {
-        XYChart.Series series = new XYChart.Series();
-        series.getData().add(new XYChart.Data("1", 2));
-        monthlyBudgetChart.getData().addAll(series);
+    private void fillData() {
+        for(Account account: user.getAccounts())
+        accounts.add(account);
+
     }
 
 }

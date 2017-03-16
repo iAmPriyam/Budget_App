@@ -1,13 +1,21 @@
 import accounts.Account;
 import database.SqliteDb;
 import expenses.Expense;
-import groovy.sql.Sql;
 import org.junit.Test;
 import users.User;
+import java.util.ArrayList;
+import java.util.ListIterator;
 
 import static org.junit.Assert.*;
 
 public class SqliteDbTest {
+    @Test
+    public void updateAccount() throws Exception {
+        SqliteDb db = new SqliteDb();
+        Account account= new Account(3,"NewTestName123123123",9999.99);
+        db.updateAccount(account);
+    }
+
     @Test
     public void insertAccount() throws Exception {
         SqliteDb db = new SqliteDb();
@@ -36,7 +44,14 @@ public class SqliteDbTest {
 
     @Test
     public void getUserData() throws Exception {
-
+        SqliteDb db = new SqliteDb();
+        User user = db.getUserData("test");
+        ArrayList<Account> accs = user.getAccounts();
+        ListIterator<Account> iterator = accs.listIterator();
+        while(iterator.hasNext()) {
+            Account acc = iterator.next();
+            System.out.println(acc.getAccountName() + " " + acc.getAccountBalance() );
+        }
     }
 
 }

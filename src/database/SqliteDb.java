@@ -7,23 +7,26 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 public class SqliteDb {
 
     private Connection connection;
-    /*
-    connecting to db
+
+    /**
+     * SqliteDB constructor - connecting to database via SqliteConnection class
      */
     public SqliteDb() {
-        this.connection = SqliteConnection.Connector();
+        this.connection = SqliteConnection.connector();
         if(connection==null) {
-            System.exit(2);
+            System.exit(1);
         }
     }
-    /*
-    checking if the the program is connected to db
-     */
+
+    /**
+     * Checking if application is connected to database
+     * @return true - connected or false - not connected
+     * */
     public boolean isDbConnected() {
         try{
             return !connection.isClosed();
@@ -32,8 +35,11 @@ public class SqliteDb {
             return false;
         }
     }
-    /*
-    Checking if password is correct
+
+    /**
+     * Verifies password
+     * @param password password to verify
+     * @return true - password correct false - password incorrect
      */
     public boolean isPasswordCorrect(String password) {
         String query = "SELECT * FROM users WHERE password = ?";
@@ -51,9 +57,13 @@ public class SqliteDb {
             return false;
         }
     }
-    /*
-    Getting user data
-    */
+
+    //DATABASE GETTERS
+    /**
+     * Getting user data based on password and filling User object attributes
+     * @param password
+     * @return User object with all attributes that are stored in database
+     */
     public User getUserData(String password) {
         String query = "SELECT * FROM users WHERE password = ?";
         try {
@@ -63,7 +73,7 @@ public class SqliteDb {
 
             if(resultSet.next()) {
                 User user = new User(resultSet.getString("name"),resultSet.getInt("id"));
-                LinkedList<Account> accounts = this.getAccounts(user.getId());
+                ArrayList<Account> accounts = this.getAccounts(user.getId());
                 user.setAccounts(accounts);
                 return user;
             }
@@ -75,22 +85,24 @@ public class SqliteDb {
             return null;
         }
     }
-    /*
-    Getting user's accounts
+    /**
+     * Getting user's Account. Account's are connected to user by ids
+     * @param user_id user's id
+     * @return ArrayList of all user's account
      */
-    public LinkedList<Account> getAccounts(int id) {
+    private ArrayList<Account> getAccounts(int user_id) {
         String query = "SELECT * FROM accounts where user_id = ?";
-        String userId = Integer.toString(id);
+        String userId = Integer.toString(user_id);
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1,userId);
             ResultSet resultSet = preparedStatement.executeQuery();
-            LinkedList<Account> accounts = new LinkedList<>();
+            ArrayList<Account> accounts = new ArrayList<>();
             while (resultSet.next()) {
                 int accountId = resultSet.getInt("id");
                 String accountName = resultSet.getString("name");
                 double accountBalance = resultSet.getDouble("balance");
-                Account account = new Account(accountName,accountBalance,accountId);
+                Account account = new Account(accountId, accountName,accountBalance);
                 account.setExpensesList(this.getAccountExpenses(account.getId()));
                 accounts.add(account);
             }
@@ -100,17 +112,19 @@ public class SqliteDb {
             return null;
         }
     }
-    /*
-    Getting expenses
+    /**
+     *
+     * @param id
+     * @return
      */
-    public LinkedList<Expense> getAccountExpenses(int id) {
+    private ArrayList<Expense> getAccountExpenses(int id) {
         String query = "SELECT * FROM expenses WHERE account_id = ?";
         String accountId = Integer.toString(id);
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1,accountId);
             ResultSet resultSet = preparedStatement.executeQuery();
-            LinkedList<Expense> expenses = new LinkedList<>();
+            ArrayList<Expense> expenses = new ArrayList<>();
             while(resultSet.next()) {
                 int expenseId = resultSet.getInt("id");
                 String expenseName = resultSet.getString("name");
@@ -124,8 +138,7 @@ public class SqliteDb {
             return null;
         }
     }
-
-    //TODO singe method to insert rows into database
+    //DATABASE INSERTS
     public void insertAccount(int userId, String accountName, double accountBalance) {
         String sql = "INSERT INTO accounts (user_id,name,balance) VALUES (?,?,?)";
         try {
@@ -153,6 +166,59 @@ public class SqliteDb {
         }
     }
 
+    //DATABASE UPDATE
 
+    /**
+     * updates accounts table's row in database
+     * @param account account that should be updated
+     */
+    public void updateAccount(Account account) {
+        String string = "UPDATE accounts SET name = ?, balance = ? WHERE id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(string);
+            preparedStatement.setString(1,account.getAccountName());
+            preparedStatement.setDouble(2,account.getAccountBalance());
+            preparedStatement.setInt(3,account.getId());
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+        } catch (SQLException exc) {
+            System.out.println(exc);
+        }
+    }
+    /**
+     * Updates expenses table's row in database
+     * @param expense expense that should be updated
+     */
+    public void updateExpense(Expense expense) {
+        String sql = "UPDATE expense SET name = ?, price = ? WHERE id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1,expense.getName());
+            preparedStatement.setDouble(2,expense.getPrice());
+            preparedStatement.setInt(3,expense.getId());
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+    /**
+     * Updates users table's row in database
+     * @param user User that should be updated
+     */
+    public void updateUser(User user) {
+        String s = "UPDATE users SET name = ?, monthlyBudget = ? WHERE id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(s);
+            preparedStatement.setString(1,user.getName());
+            preparedStatement.setDouble(2,user.getMonthlyBudget());
+            preparedStatement.setInt(3,user.getId());
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+        } catch (SQLException exc) {
+            System.out.println(exc);
+        }
+    }
 
+    //TODO JAVADOCS
 }
