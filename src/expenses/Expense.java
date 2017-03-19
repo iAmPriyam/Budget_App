@@ -6,13 +6,22 @@ public class Expense {
     private String name;
     private double price;
     private GregorianCalendar date;
+    private ExpenseCategory category;
 
-    public Expense(int id, String name, double price) {
+    public Expense(int id, String name, double price, ExpenseCategory category) {
         this.id = id;
         this.name = name;
         this.price = price;
-
+        this.category = category;
         this.date = new GregorianCalendar();
+    }
+
+    public Expense(int id, String name, double price, ExpenseCategory category, GregorianCalendar date) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.category = category;
+        this.date = date;
     }
 
     public int getId() {
@@ -31,6 +40,10 @@ public class Expense {
         return price;
     }
 
+    public ExpenseCategory getCategory() {
+        return category;
+    }
+
     public void setPrice(double price) {
         this.price = price;
     }
@@ -41,5 +54,9 @@ public class Expense {
 
     public void setDate(GregorianCalendar date) {
         this.date = date;
+    }
+
+    public void setCategory(ExpenseCategory category) {
+        this.category = category;
     }
 }

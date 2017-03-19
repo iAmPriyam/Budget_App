@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
+<?import javafx.scene.*?>
 <?import javafx.scene.chart.*?>
 <?import javafx.scene.effect.*?>
 <?import com.jfoenix.controls.*?>
@@ -7,32 +9,36 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.MainSceneController">
-   <top>
-      <MenuBar BorderPane.alignment="CENTER">
-         <menus>
-            <Menu mnemonicParsing="false" text="=">
-              <items>
-                  <MenuItem fx:id="menuAccounts" mnemonicParsing="false" text="Accounts" />
-                  <MenuItem fx:id="menuStats" mnemonicParsing="false" text="Monthly Statistics" />
-                  <MenuItem fx:id="menuPayments" mnemonicParsing="false" text="Payments" />
-                  <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem fx:id="menuSettings" mnemonicParsing="false" text="App Settings" />
-              </items>
-            </Menu>
-         </menus>
-      </MenuBar>
-   </top>
-   <center>
-      <Pane prefHeight="361.0" prefWidth="255.0" BorderPane.alignment="CENTER">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.MainSceneController">
+   <children>
+      <Pane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: #f6f6f6;">
          <children>
-            <TreeTableView fx:id="AccountsTable" layoutX="14.0" layoutY="14.0" prefHeight="325.0" prefWidth="557.0">
-              <columns>
-                <TreeTableColumn fx:id="AccountNameColumn" prefWidth="262.0" text="Account" />
-                <TreeTableColumn fx:id="AccountBalanceColumn" prefWidth="294.0" text="Balance" />
-              </columns>
-            </TreeTableView>
+            <JFXTabPane layoutY="43.0" prefHeight="568.0" prefWidth="900.0">
+               <tabs>
+                  <Tab text="Untitled Tab">
+                    <content>
+                      <AnchorPane minHeight="200.0" minWidth="100.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <TableView fx:id="AccountsTable" prefHeight="244.0" prefWidth="448.0">
+                                <columns>
+                                  <TableColumn fx:id="AccountNameColumn" prefWidth="197.0" text="Account" />
+                                  <TableColumn fx:id="AccountBalanceColumn" minWidth="1.0" prefWidth="223.0" text="Balance" />
+                                </columns>
+                              </TableView>
+                              <Label layoutX="58.0" layoutY="267.0" text="TOTAL: " />
+                              <Label fx:id="totalBalanceLbl" layoutX="283.0" layoutY="267.0" text="money" />
+                           </children>
+                        </AnchorPane>
+                    </content>
+                  </Tab>
+                  <Tab text="Untitled Tab">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                    </content>
+                  </Tab>
+               </tabs>
+            </JFXTabPane>
          </children>
       </Pane>
-   </center>
-</BorderPane>
+   </children>
+</AnchorPane>

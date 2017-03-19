@@ -1,6 +1,8 @@
 package accounts;
 
 import expenses.Expense;
+import incomes.Income;
+
 import java.util.ArrayList;
 /**
  * Account object has 4 attributes:
@@ -15,6 +17,7 @@ public class Account {
     private String accountName;
     private double accountBalance;
     private ArrayList<Expense> expensesList;
+    private ArrayList<Income> incomesList;
 
     /**
      * Account class constructor
@@ -27,6 +30,7 @@ public class Account {
         this.accountBalance = accountBalance;
         this.id = id;
         expensesList = new ArrayList<>();
+        incomesList = new ArrayList<>();
     }
     /**
      * Transfers money from account to targetAccount.
@@ -83,5 +87,11 @@ public class Account {
     }
     public void setExpensesList(ArrayList<Expense> expensesList) {
         this.expensesList = expensesList;
+    }
+    public ArrayList<Income> getIncomesList() {
+        return incomesList;
+    }
+    public void setIncomesList(ArrayList<Income> incomesList) {
+        this.incomesList = incomesList;
     }
 }

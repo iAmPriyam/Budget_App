@@ -2,12 +2,17 @@ package database;
 
 import accounts.Account;
 import expenses.Expense;
+import expenses.ExpenseCategory;
+import incomes.Income;
+import incomes.IncomeCategory;
 import users.User;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
 
 public class SqliteDb {
 
@@ -104,6 +109,7 @@ public class SqliteDb {
                 double accountBalance = resultSet.getDouble("balance");
                 Account account = new Account(accountId, accountName,accountBalance);
                 account.setExpensesList(this.getAccountExpenses(account.getId()));
+                account.setIncomesList(this.getAccountIncomes(account.getId()));
                 accounts.add(account);
             }
             return accounts;
@@ -118,23 +124,94 @@ public class SqliteDb {
      * @return
      */
     private ArrayList<Expense> getAccountExpenses(int id) {
-        String query = "SELECT * FROM expenses WHERE account_id = ?";
+        String expensesQuery = "SELECT * FROM expenses WHERE account_id = ?";
+        String categoriesQuery = "SELECT * FROM expensesCategories";
         String accountId = Integer.toString(id);
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            PreparedStatement ps = connection.prepareStatement(categoriesQuery);
+            ResultSet categoriesSet = ps.executeQuery();
+            HashMap<Integer,ExpenseCategory> categories = new HashMap<>();
+            while(categoriesSet.next()) {
+                int categoryId = categoriesSet.getInt("id");
+                String categoryName = categoriesSet.getString("name");
+                categories.put(categoryId,new ExpenseCategory(categoryName,categoryId));
+            }
+
+            PreparedStatement preparedStatement = connection.prepareStatement(expensesQuery);
             preparedStatement.setString(1,accountId);
             ResultSet resultSet = preparedStatement.executeQuery();
             ArrayList<Expense> expenses = new ArrayList<>();
+
             while(resultSet.next()) {
                 int expenseId = resultSet.getInt("id");
                 String expenseName = resultSet.getString("name");
-                double expansePrice = resultSet.getDouble("price");
-                Expense expense = new Expense(expenseId,expenseName,expansePrice);
+                double expensePrice = resultSet.getDouble("price");
+                int expenseCategoryId = resultSet.getInt("category_id");
+                String expenseDate = resultSet.getString("date");
+                String[] date = expenseDate.split("-|\\.");
+                int hour = Integer.parseInt(date[0]);
+                int minutes = Integer.parseInt(date[1]);
+                int dayOfMonth = Integer.parseInt(date[2]);
+                int month = Integer.parseInt(date[3]);
+                int year = Integer.parseInt(date[4]);
+                GregorianCalendar expDate = new GregorianCalendar(year,month,dayOfMonth,hour,minutes);
+                ExpenseCategory category = categories.get(expenseCategoryId);
+                Expense expense = new Expense(expenseId,expenseName,expensePrice,category,expDate);
                 expenses.add(expense);
             }
+            ps.close();
+            preparedStatement.close();
+            resultSet.close();
+            categoriesSet.close();
             return expenses;
         } catch (SQLException e) {
             System.out.println(e);
+            return null;
+        }
+    }
+    private ArrayList<Income> getAccountIncomes(int id) {
+        String accountId = Integer.toString(id);
+        String categoriesQuery = "SELECT * FROM incomesCategories";
+        String incomeQuery = "SELECT * FROM incomes WHERE account_id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(categoriesQuery);
+            ResultSet categoriesSet = preparedStatement.executeQuery();
+            HashMap<Integer, IncomeCategory> categories = new HashMap<>();
+            while(categoriesSet.next()) {
+                int categoryId = categoriesSet.getInt("id");
+                String categoryName = categoriesSet.getString("name");
+                categories.put(categoryId,new IncomeCategory(categoryId,categoryName));
+            }
+            PreparedStatement preparedStatement1 = connection.prepareStatement(incomeQuery);
+            preparedStatement1.setString(1,accountId);
+            ResultSet incomesSet = preparedStatement1.executeQuery();
+            ArrayList<Income> incomes = new ArrayList<>();
+
+            while(incomesSet.next()) {
+                int incomeId = incomesSet.getInt("id");
+                int incomeCategoryId = incomesSet.getInt("category_id");
+                String incomeName = incomesSet.getString("name");
+                double incomeMoney = incomesSet.getDouble("money");
+                String incomeDate = incomesSet.getString("date");
+                String[] date = incomeDate.split("-|\\.");
+                int hour = Integer.parseInt(date[0]);
+                int minutes = Integer.parseInt(date[1]);
+                int dayOfMonth = Integer.parseInt(date[2]);
+                int month = Integer.parseInt(date[3]);
+                int year = Integer.parseInt(date[4]);
+                GregorianCalendar incDate = new GregorianCalendar(year,month,dayOfMonth,hour,minutes);
+                IncomeCategory category = categories.get(incomeCategoryId);
+                Income income = new Income(incomeId,incomeName,incomeMoney,category,incDate);
+                incomes.add(income);
+            }
+
+            preparedStatement1.close();
+            categoriesSet.close();
+            incomesSet.close();
+            preparedStatement.close();
+            return incomes;
+        } catch(SQLException exc) {
+            System.out.println(exc);
             return null;
         }
     }
@@ -220,5 +297,4 @@ public class SqliteDb {
         }
     }
 
-    //TODO JAVADOCS
 }

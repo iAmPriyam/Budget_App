@@ -1,5 +1,6 @@
 import accounts.Account;
 import expenses.Expense;
+import expenses.ExpenseCategory;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -29,7 +30,7 @@ public class AccountTest {
     }
     @Test
     public void addExpenseGetExpensesList() throws Exception {
-        Expense expense = new Expense(2,"Tesco",150);
+        Expense expense = new Expense(2,"Tesco",150, new ExpenseCategory("test",2));
         Account account = new Account(1,"Test",1000);
         account.addExpense(expense);
         assertEquals(850,account.getAccountBalance(),0.001);
