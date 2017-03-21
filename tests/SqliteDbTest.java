@@ -58,7 +58,8 @@ public class SqliteDbTest {
             ListIterator<Expense> expenseListIterator = expenses.listIterator();
             while(expenseListIterator.hasNext()) {
                 Expense expense = expenseListIterator.next();
-                System.out.println(expense.getName() + " " + expense.getCategory().getName() + " " + expense.getDate().get(Calendar.DATE)+expense.getDate().get(Calendar.HOUR_OF_DAY));
+                System.out.println(expense.getDate().get(Calendar.DAY_OF_MONTH)+"."+expense.getDate().get(Calendar.MONTH)+"."+expense.getDate().get(Calendar.YEAR));
+                System.out.println("----");
             }
             ArrayList<Income> incomes = acc.getIncomesList();
             ListIterator<Income> incomesListIterator = incomes.listIterator();

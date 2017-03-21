@@ -12,6 +12,22 @@ public class Income {
     private GregorianCalendar date;
     private IncomeCategory category;
 
+    public Income(int id, String name, double money) {
+        this.id = id;
+        this.name = name;
+        this. money = money;
+        this.category = null;
+        this.date = new GregorianCalendar();
+    }
+
+    public Income(int id, String name, double money, IncomeCategory category) {
+        this.id = id;
+        this.name = name;
+        this. money = money;
+        this.category = category;
+        this.date = new GregorianCalendar();
+    }
+
     public Income(int id, String name, double money, IncomeCategory category, GregorianCalendar date) {
         this.id = id;
         this.name = name;

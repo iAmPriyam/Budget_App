@@ -8,6 +8,14 @@ public class Expense {
     private GregorianCalendar date;
     private ExpenseCategory category;
 
+    public Expense(int id, String name, double price) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.category = null;
+        this.date = new GregorianCalendar();
+    }
+
     public Expense(int id, String name, double price, ExpenseCategory category) {
         this.id = id;
         this.name = name;

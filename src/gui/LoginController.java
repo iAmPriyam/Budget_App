@@ -11,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
@@ -28,7 +29,7 @@ public class LoginController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         if(db.isDbConnected()) {
-            isConnected.setText("Connected");
+            isConnected.setText("Type your password");
         } else {
             isConnected.setText("Not");
         }
@@ -46,7 +47,7 @@ public class LoginController implements Initializable {
                 appStage.setScene(new Scene(parent));
                 appStage.show();
             } else {
-                isConnected.setText("niepoprawne");
+                isConnected.setText("Wrong password");
             }
         } catch (IOException e) {
             e.printStackTrace();

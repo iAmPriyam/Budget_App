@@ -15,6 +15,12 @@ public class User {
         accounts = new ArrayList<>();
         monthlyBudget = 0;
     }
+    public User(String name,int id,double monthlyBudget){
+        this.id = id;
+        this.name = name;
+        this.accounts = new ArrayList<>();
+        this.monthlyBudget = monthlyBudget;
+    }
 
     public double getMonthlyBudget() {
         return monthlyBudget;

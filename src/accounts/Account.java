@@ -55,7 +55,6 @@ public class Account {
     public void reduceAccountBalance(double money) {
         accountBalance -= money;
     }
-
     /**
      * Adding Expense object to expensesList<Expense> and reduces accountBalance
      * @param expense new expense that should be added to expenseList
@@ -65,8 +64,30 @@ public class Account {
         this.reduceAccountBalance(expense.getPrice());
     }
     /**
-    Getters and setters
+     * Removes expense from expense list and increase accountBalance
+     * @param expense Expense object to remove from list
      */
+    public void removeExpense(Expense expense) {
+        expensesList.remove(expense);
+        this.increaseAccountBalance(expense.getPrice());
+    }
+    /**
+     * Adds new income to the end of incomeList and increases accountBalance
+     * @param income income Object
+     */
+    public void addIncome(Income income) {
+        incomesList.add(income);
+        this.increaseAccountBalance(income.getMoney());
+    }
+    /**
+     * Removes income from incomesList and reduces account's balance
+     * @param income
+     */
+    public void removeIncome(Income income) {
+        incomesList.remove(income);
+        this.reduceAccountBalance(income.getMoney());
+    }
+    //Getters and setters
     public int getId() {
         return id;
     }

@@ -77,7 +77,7 @@ public class SqliteDb {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if(resultSet.next()) {
-                User user = new User(resultSet.getString("name"),resultSet.getInt("id"));
+                User user = new User(resultSet.getString("name"),resultSet.getInt("id"),resultSet.getDouble("monthlyBudget"));
                 ArrayList<Account> accounts = this.getAccounts(user.getId());
                 user.setAccounts(accounts);
                 return user;
@@ -148,13 +148,11 @@ public class SqliteDb {
                 double expensePrice = resultSet.getDouble("price");
                 int expenseCategoryId = resultSet.getInt("category_id");
                 String expenseDate = resultSet.getString("date");
-                String[] date = expenseDate.split("-|\\.");
-                int hour = Integer.parseInt(date[0]);
-                int minutes = Integer.parseInt(date[1]);
-                int dayOfMonth = Integer.parseInt(date[2]);
-                int month = Integer.parseInt(date[3]);
-                int year = Integer.parseInt(date[4]);
-                GregorianCalendar expDate = new GregorianCalendar(year,month,dayOfMonth,hour,minutes);
+                String[] date = expenseDate.split("-");
+                int dayOfMonth = Integer.parseInt(date[0]);
+                int month = Integer.parseInt(date[1]);
+                int year = Integer.parseInt(date[2]);
+                GregorianCalendar expDate = new GregorianCalendar(year,month,dayOfMonth);
                 ExpenseCategory category = categories.get(expenseCategoryId);
                 Expense expense = new Expense(expenseId,expenseName,expensePrice,category,expDate);
                 expenses.add(expense);
