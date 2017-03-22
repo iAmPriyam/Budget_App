@@ -227,13 +227,14 @@ public class SqliteDb {
         }
     }
 
-    public void insertExpense(int accountId, String expenseName, double expensePrice) {
-        String sql = "INSERT INTO expenses (account_id,name,price) VALUES (?,?,?)";
+    public void insertExpense(int accountId, int categoryId ,String expenseName, double expensePrice) {
+        String sql = "INSERT INTO expenses (account_id,category_id,name,price) VALUES (?,?,?,?)";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1,accountId);
-            preparedStatement.setString(2,expenseName);
-            preparedStatement.setDouble(3,expensePrice);
+            preparedStatement.setInt(2,categoryId);
+            preparedStatement.setString(3,expenseName);
+            preparedStatement.setDouble(4,expensePrice);
             preparedStatement.executeUpdate();
             preparedStatement.close();
         } catch (SQLException exc) {

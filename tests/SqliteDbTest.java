@@ -27,7 +27,7 @@ public class SqliteDbTest {
     @Test
     public void insertExpense() throws Exception {
         SqliteDb db = new SqliteDb();
-        db.insertExpense(1,"TestWydatku",129.49);
+        db.insertExpense(1,1,"TestWydatku",129.49);
     }
 
     @Test

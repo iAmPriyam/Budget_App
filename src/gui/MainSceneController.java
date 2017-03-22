@@ -1,18 +1,31 @@
 package gui;
 
 import accounts.Account;
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXDialog;
+import com.jfoenix.controls.JFXDialogLayout;
 import expenses.Expense;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.SubScene;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Text;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import users.User;
 
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -39,6 +52,15 @@ public class MainSceneController  {
     private TableColumn<Account,Double> AccountBalanceColumn;
     @FXML
     private Label totalBalanceLbl;
+    @FXML
+    private JFXButton addExpenseBtn;
+    @FXML
+    private JFXDialogLayout addExpenseDialogLayout;
+    @FXML
+    private JFXDialog addExpenseDialog;
+
+
+
 
     public void GetUser(User user) {
         if(user!=null) {
@@ -102,5 +124,19 @@ public class MainSceneController  {
         System.out.println(money);
         moneyLeftLbl.setText(money+" PLN");
     }
+    public boolean addExpense() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("addExpenseDialog.fxml"));
+            Parent root = (Parent) loader.load();
+            Stage stage = new Stage();
+            stage.setTitle("Add expense");
+            stage.setScene(new Scene(root));
+            stage.show();
+            return true;
+        } catch(IOException exc) {
+            System.out.println(exc);
+            return false;
+        }
 
+    }
 }

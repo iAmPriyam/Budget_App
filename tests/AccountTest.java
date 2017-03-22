@@ -10,9 +10,9 @@ import static org.junit.Assert.*;
 public class AccountTest {
     @Test
     public void transferMoney() throws Exception {
-        Account account_1 = new Account(1,"Account_1",1500);
+        Account account_1 = new Account(1,"Account_1",1500.23);
         Account account_2 = new Account(2,"Account_2", 1000);
-        account_1.transferMoney(1000,account_2);
+        account_1.transferMoney(1000.23,account_2);
         assertEquals(500,account_1.getAccountBalance(),1);
         assertEquals(2000,account_2.getAccountBalance(),1);
         account_1.transferMoney(500,account_1);

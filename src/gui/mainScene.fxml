@@ -21,7 +21,7 @@
                     <content>
                       <AnchorPane minHeight="200.0" minWidth="100.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <LineChart fx:id="monthlyLineChart" layoutX="25.0" layoutY="56.0" prefHeight="220.0" prefWidth="500.0">
+                              <LineChart fx:id="monthlyLineChart" layoutX="25.0" layoutY="38.0" prefHeight="220.0" prefWidth="500.0">
                                 <xAxis>
                                   <CategoryAxis fx:id="dayOfMonthAxis" side="BOTTOM" />
                                 </xAxis>
@@ -38,11 +38,13 @@
                               <Label alignment="CENTER" contentDisplay="CENTER" layoutX="75.0" layoutY="441.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="200.0" text="TOTAL BALANCE: " textFill="#2196f3">
                                  <font>
                                     <Font size="13.0" />
-                                 </font></Label>
+                                 </font>
+                              </Label>
                               <Label fx:id="totalBalanceLbl" alignment="CENTER" contentDisplay="CENTER" layoutX="275.0" layoutY="441.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="200.0" text="money" textFill="#2196f3">
                                  <font>
                                     <Font name="System Bold" size="13.0" />
-                                 </font></Label>
+                                 </font>
+                              </Label>
                               <Label alignment="CENTER" contentDisplay="CENTER" layoutX="75.0" layoutY="471.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="200.0" text="BUDGET FOR THIS MONTH:" textFill="#2196f3">
                                  <font>
                                     <Font size="13.0" />
@@ -75,9 +77,9 @@
                   </Tab>
                </tabs>
             </JFXTabPane>
-            <JFXButton layoutX="126.0" layoutY="561.0" style="-fx-background-color: #2196f3;" text="Add income" textFill="WHITE" />
+            <JFXButton layoutX="154.0" layoutY="551.0" style="-fx-background-color: #2196f3;" text="Add income" textFill="WHITE" />
             <Line endX="550.0" layoutY="550.0" stroke="#2196f3" strokeLineCap="ROUND" strokeWidth="2.0" />
-            <JFXButton layoutX="-1.0" layoutY="561.0" style="-fx-background-color: #2196f3;" text="Add expense" textFill="WHITE" />
+            <JFXButton fx:id="addExpenseBtn" layoutX="6.0" layoutY="551.0" onAction="#addExpense" style="-fx-background-color: #2196f3;" text="Add expense" textFill="WHITE" />
          </children>
       </Pane>
    </children>
