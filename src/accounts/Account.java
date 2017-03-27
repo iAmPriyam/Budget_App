@@ -115,4 +115,7 @@ public class Account {
     public void setIncomesList(ArrayList<Income> incomesList) {
         this.incomesList = incomesList;
     }
+    public String toString(){
+        return this.accountName;
+    }
 }

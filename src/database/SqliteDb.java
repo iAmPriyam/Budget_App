@@ -28,6 +28,14 @@ public class SqliteDb {
         }
     }
 
+    public void closeConnection(){
+        try {
+            connection.close();
+        } catch (SQLException exc) {
+            System.out.println("nie udało się zamknąć połączenia");
+        }
+    }
+
     /**
      * Checking if application is connected to database
      * @return true - connected or false - not connected
@@ -149,9 +157,9 @@ public class SqliteDb {
                 int expenseCategoryId = resultSet.getInt("category_id");
                 String expenseDate = resultSet.getString("date");
                 String[] date = expenseDate.split("-");
-                int dayOfMonth = Integer.parseInt(date[0]);
+                int dayOfMonth = Integer.parseInt(date[2]);
                 int month = Integer.parseInt(date[1]);
-                int year = Integer.parseInt(date[2]);
+                int year = Integer.parseInt(date[0]);
                 GregorianCalendar expDate = new GregorianCalendar(year,month,dayOfMonth);
                 ExpenseCategory category = categories.get(expenseCategoryId);
                 Expense expense = new Expense(expenseId,expenseName,expensePrice,category,expDate);
@@ -227,14 +235,15 @@ public class SqliteDb {
         }
     }
 
-    public void insertExpense(int accountId, int categoryId ,String expenseName, double expensePrice) {
-        String sql = "INSERT INTO expenses (account_id,category_id,name,price) VALUES (?,?,?,?)";
+    public void insertExpense(int accountId, int categoryId ,String expenseName, double expensePrice, String date) {
+        String sql = "INSERT INTO expenses (account_id,category_id,name,price,date) VALUES (?,?,?,?,?)";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1,accountId);
             preparedStatement.setInt(2,categoryId);
             preparedStatement.setString(3,expenseName);
             preparedStatement.setDouble(4,expensePrice);
+            preparedStatement.setString(5,date);
             preparedStatement.executeUpdate();
             preparedStatement.close();
         } catch (SQLException exc) {
@@ -295,5 +304,23 @@ public class SqliteDb {
             System.out.println(exc);
         }
     }
+    public ArrayList<ExpenseCategory> getExpenseCategories() {
+        String query = "SELECT * FROM expensesCategories";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            ArrayList<ExpenseCategory> categories = new ArrayList<>();
+            while(resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String name = resultSet.getString("name");
+                ExpenseCategory category = new ExpenseCategory(name,id);
+                categories.add(category);
+            }
+            return categories;
 
+        } catch (SQLException exc) {
+            System.out.println(exc);
+            return null;
+        }
+    }
 }

@@ -11,7 +11,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
@@ -45,7 +44,9 @@ public class LoginController implements Initializable {
                 mainSceneController.GetUser(db.getUserData(txtPassword.getText()));
                 appStage.setTitle("BudgetApp");
                 appStage.setScene(new Scene(parent));
+                appStage.setResizable(false);
                 appStage.show();
+                db.closeConnection();
             } else {
                 isConnected.setText("Wrong password");
             }

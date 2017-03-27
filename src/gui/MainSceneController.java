@@ -4,6 +4,7 @@ import accounts.Account;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
+import database.SqliteDb;
 import expenses.Expense;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -23,6 +24,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import users.User;
 
 import java.io.IOException;
@@ -54,11 +56,6 @@ public class MainSceneController  {
     private Label totalBalanceLbl;
     @FXML
     private JFXButton addExpenseBtn;
-    @FXML
-    private JFXDialogLayout addExpenseDialogLayout;
-    @FXML
-    private JFXDialog addExpenseDialog;
-
 
 
 
@@ -124,19 +121,30 @@ public class MainSceneController  {
         System.out.println(money);
         moneyLeftLbl.setText(money+" PLN");
     }
-    public boolean addExpense() {
+    public void addExpense() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("addExpenseDialog.fxml"));
             Parent root = (Parent) loader.load();
+            AddExpenseController controller = loader.getController();
+            controller.populateData(user);
             Stage stage = new Stage();
             stage.setTitle("Add expense");
+            stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(new Scene(root));
-            stage.show();
-            return true;
+
+            stage.showAndWait();
+            this.refresh();
         } catch(IOException exc) {
             System.out.println(exc);
-            return false;
+
         }
 
+    }
+    private void refresh(){
+        SqliteDb db = new SqliteDb();
+        monthlyLineChart.getData().clear();
+        AccountsTable.getItems().clear();
+        this.GetUser(db.getUserData("budget"));
+        db.closeConnection();
     }
 }

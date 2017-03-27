@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.validation.*?>
 <?import javafx.scene.control.*?>
 <?import com.jfoenix.controls.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.AddExpenseController">
    <children>
       <JFXTextField fx:id="expenseNameTxt" layoutX="15.0" layoutY="23.0" prefHeight="35.0" prefWidth="370.0" promptText="Expense name" />
-      <JFXTextField fx:id="PriceTxt" layoutX="14.0" layoutY="83.0" prefHeight="35.0" prefWidth="180.0" promptText="Price" />
+      <JFXTextField fx:id="priceTxt" layoutX="14.0" layoutY="83.0" prefHeight="35.0" prefWidth="180.0" promptText="Price" />
       <DatePicker fx:id="datePicker" layoutX="206.0" layoutY="81.0" prefHeight="35.0" prefWidth="180.0" promptText="Date" />
       <JFXButton fx:id="addExpenseBtn" layoutX="258.0" layoutY="247.0" onAction="#addExpense" style="-fx-background-color: #2196f3;" text="Add expense" textFill="WHITE" />
       <Label layoutX="14.0" layoutY="137.0" prefHeight="27.0" prefWidth="180.0" text="Category:" />

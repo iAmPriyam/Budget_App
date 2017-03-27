@@ -1,6 +1,7 @@
 import accounts.Account;
 import database.SqliteDb;
 import expenses.Expense;
+import expenses.ExpenseCategory;
 import incomes.Income;
 import org.junit.Test;
 import users.User;
@@ -11,6 +12,15 @@ import java.util.ListIterator;
 import static org.junit.Assert.*;
 
 public class SqliteDbTest {
+    @Test
+    public void getExpenseCategories() throws Exception {
+        SqliteDb db = new SqliteDb();
+        ArrayList<ExpenseCategory> categories = db.getExpenseCategories();
+        for(ExpenseCategory cat : categories) {
+            System.out.println(cat.getName()+ " " + cat.getId());
+        }
+    }
+
     @Test
     public void updateAccount() throws Exception {
         SqliteDb db = new SqliteDb();
@@ -27,7 +37,7 @@ public class SqliteDbTest {
     @Test
     public void insertExpense() throws Exception {
         SqliteDb db = new SqliteDb();
-        db.insertExpense(1,1,"TestWydatku",129.49);
+        db.insertExpense(1,1,"TestWydatku",129.49,"2016-01-12");
     }
 
     @Test
