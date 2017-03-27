@@ -32,7 +32,7 @@ public class SqliteDb {
         try {
             connection.close();
         } catch (SQLException exc) {
-            System.out.println("nie udało się zamknąć połączenia");
+            System.out.println(exc);
         }
     }
 
@@ -200,12 +200,10 @@ public class SqliteDb {
                 double incomeMoney = incomesSet.getDouble("money");
                 String incomeDate = incomesSet.getString("date");
                 String[] date = incomeDate.split("-|\\.");
-                int hour = Integer.parseInt(date[0]);
-                int minutes = Integer.parseInt(date[1]);
+                int year = Integer.parseInt(date[0]);
+                int month = Integer.parseInt(date[1]);
                 int dayOfMonth = Integer.parseInt(date[2]);
-                int month = Integer.parseInt(date[3]);
-                int year = Integer.parseInt(date[4]);
-                GregorianCalendar incDate = new GregorianCalendar(year,month,dayOfMonth,hour,minutes);
+                GregorianCalendar incDate = new GregorianCalendar(year,month,dayOfMonth);
                 IncomeCategory category = categories.get(incomeCategoryId);
                 Income income = new Income(incomeId,incomeName,incomeMoney,category,incDate);
                 incomes.add(income);
@@ -234,7 +232,7 @@ public class SqliteDb {
             System.out.println(exc);
         }
     }
-
+    @SuppressWarnings("Duplicates")
     public void insertExpense(int accountId, int categoryId ,String expenseName, double expensePrice, String date) {
         String sql = "INSERT INTO expenses (account_id,category_id,name,price,date) VALUES (?,?,?,?,?)";
         try {
@@ -250,13 +248,29 @@ public class SqliteDb {
             System.out.println(exc);
         }
     }
-
+    @SuppressWarnings("Duplicates")
+    public void insertIncome(int account_id, int category_id, String name, double money, String date ) {
+        String str = "INSERT INTO incomes (account_id, category_id, name, money, date) VALUES (?,?,?,?,?)";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(str);
+            preparedStatement.setInt(1,account_id);
+            preparedStatement.setInt(2,category_id);
+            preparedStatement.setString(3,name);
+            preparedStatement.setDouble(4,money);
+            preparedStatement.setString(5,date);
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+        }catch (SQLException exc) {
+            System.out.println(exc);
+        }
+    }
     //DATABASE UPDATE
 
     /**
      * updates accounts table's row in database
      * @param account account that should be updated
      */
+    @SuppressWarnings("Duplicates")
     public void updateAccount(Account account) {
         String string = "UPDATE accounts SET name = ?, balance = ? WHERE id = ?";
         try {
@@ -270,6 +284,22 @@ public class SqliteDb {
             System.out.println(exc);
         }
     }
+
+    @SuppressWarnings("Duplicates")
+    public void updateAccount(Account account, double money) {
+        String string = "UPDATE accounts SET name = ?, balance = ? WHERE id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(string);
+            preparedStatement.setString(1,account.getAccountName());
+            preparedStatement.setDouble(2,money);
+            preparedStatement.setInt(3,account.getId());
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+        } catch (SQLException exc) {
+            System.out.println(exc);
+        }
+    }
+
     /**
      * Updates expenses table's row in database
      * @param expense expense that should be updated
@@ -318,6 +348,24 @@ public class SqliteDb {
             }
             return categories;
 
+        } catch (SQLException exc) {
+            System.out.println(exc);
+            return null;
+        }
+    }
+    public ArrayList<IncomeCategory> getIncomeCategories() {
+        String query = "SELECT * FROM incomesCategories";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            ArrayList<IncomeCategory> categories = new ArrayList<>();
+            while(resultSet.next()){
+                int id = resultSet.getInt("id");
+                String name = resultSet.getString("name");
+                IncomeCategory category = new IncomeCategory(id,name);
+                categories.add(category);
+            }
+            return categories;
         } catch (SQLException exc) {
             System.out.println(exc);
             return null;

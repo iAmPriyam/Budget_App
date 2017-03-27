@@ -1,27 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.shape.*?>
-<?import javafx.scene.text.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.chart.*?>
-<?import javafx.scene.effect.*?>
-<?import com.jfoenix.controls.*?>
-<?import java.lang.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXProgressBar?>
+<?import com.jfoenix.controls.JFXTabPane?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="550.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.MainSceneController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="550.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.MainSceneController">
    <children>
       <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="550.0" style="-fx-background-color: #f6f6f6;">
          <children>
-            <JFXTabPane layoutY="-2.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="550.0">
+            <JFXTabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="550.0">
                <tabs>
                   <Tab text="Overview">
                     <content>
                       <AnchorPane minHeight="200.0" minWidth="100.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <LineChart fx:id="monthlyLineChart" layoutX="25.0" layoutY="38.0" prefHeight="220.0" prefWidth="500.0">
+                              <LineChart fx:id="monthlyLineChart" layoutX="25.0" layoutY="38.0" prefHeight="220.0" prefWidth="500.0" style="-fx-shape: 10;">
                                 <xAxis>
                                   <CategoryAxis fx:id="dayOfMonthAxis" side="BOTTOM" />
                                 </xAxis>
@@ -59,7 +66,16 @@
                         </AnchorPane>
                     </content>
                   </Tab>
-                  <Tab text="Monthly Statistics" />
+                  <Tab text="Monthly Statistics">
+                     <content>
+                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                           <children>
+                              <PieChart fx:id="expensesPieChart" layoutX="50.0" layoutY="14.0" legendSide="LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="450.0" />
+                              <JFXProgressBar fx:id="budgetProgressBar" layoutX="50.0" layoutY="293.0" prefHeight="12.0" prefWidth="450.0" />
+                              <Label layoutX="217.0" layoutY="264.0" text="Your budget progress" />
+                           </children>
+                        </AnchorPane>
+                     </content></Tab>
                   <Tab text="Incomes">
                     <content>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
@@ -77,9 +93,16 @@
                   </Tab>
                </tabs>
             </JFXTabPane>
-            <JFXButton layoutX="154.0" layoutY="551.0" style="-fx-background-color: #2196f3;" text="Add income" textFill="WHITE" />
             <Line endX="550.0" layoutY="550.0" stroke="#2196f3" strokeLineCap="ROUND" strokeWidth="2.0" />
-            <JFXButton fx:id="addExpenseBtn" layoutX="6.0" layoutY="551.0" onAction="#addExpense" style="-fx-background-color: #2196f3;" text="Add expense" textFill="WHITE" />
+            <HBox layoutX="-2.0" layoutY="551.0" prefHeight="50.0" prefWidth="552.0" spacing="20.0">
+               <children>
+                  <JFXButton fx:id="addExpenseBtn" onAction="#addExpense" style="-fx-background-color: #2196f3;" text="Add expense" textFill="WHITE" />
+                  <JFXButton fx:id="addIncomeBtn" onAction="#addIncome" style="-fx-background-color: #2196f3;" text="Add income" textFill="WHITE" />
+               </children>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+            </HBox>
          </children>
       </Pane>
    </children>

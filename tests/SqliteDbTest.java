@@ -3,6 +3,7 @@ import database.SqliteDb;
 import expenses.Expense;
 import expenses.ExpenseCategory;
 import incomes.Income;
+import incomes.IncomeCategory;
 import org.junit.Test;
 import users.User;
 import java.util.ArrayList;
@@ -12,6 +13,14 @@ import java.util.ListIterator;
 import static org.junit.Assert.*;
 
 public class SqliteDbTest {
+    @Test
+    public void getIncomeCategories() throws Exception {
+        SqliteDb db = new SqliteDb();
+        for(IncomeCategory incomeCategory : db.getIncomeCategories()) {
+            System.out.println(incomeCategory.getName());
+        }
+    }
+
     @Test
     public void getExpenseCategories() throws Exception {
         SqliteDb db = new SqliteDb();
