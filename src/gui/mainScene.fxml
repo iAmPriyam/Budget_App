@@ -3,6 +3,7 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXProgressBar?>
 <?import com.jfoenix.controls.JFXTabPane?>
+<?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.LineChart?>
@@ -72,7 +73,18 @@
                            <children>
                               <PieChart fx:id="expensesPieChart" layoutX="50.0" layoutY="14.0" legendSide="LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="450.0" />
                               <JFXProgressBar fx:id="budgetProgressBar" layoutX="50.0" layoutY="293.0" prefHeight="12.0" prefWidth="450.0" />
-                              <Label layoutX="217.0" layoutY="264.0" text="Your budget progress" />
+                              <Label layoutX="50.0" layoutY="264.0" text="You've spend:" />
+                              <Label fx:id="budgetPercentTxt" layoutX="132.0" layoutY="264.0" text="XY% of your monthly budget">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Label>
+                              <JFXTextField editable="false" layoutX="50.0" layoutY="338.0" prefHeight="25.0" prefWidth="177.0" text="Money left to the end of month:" />
+                              <JFXTextField fx:id="moneyLeftTxt" editable="false" layoutX="245.0" layoutY="338.0" prefHeight="25.0" prefWidth="71.0" />
+                              <JFXTextField fx:id="moneyPerDayTxt" editable="false" layoutX="244.0" layoutY="379.0" prefHeight="25.0" prefWidth="72.0" />
+                              <JFXTextField editable="false" layoutX="50.0" layoutY="379.0" prefHeight="25.0" prefWidth="176.0" text="Money per day:" />
+                              <JFXTextField fx:id="inc_expRatingTxt" editable="false" layoutX="244.0" layoutY="425.0" prefHeight="25.0" prefWidth="72.0" />
+                              <JFXTextField editable="false" layoutX="51.0" layoutY="425.0" prefHeight="25.0" prefWidth="176.0" text="Incomes/Expenses rating" />
                            </children>
                         </AnchorPane>
                      </content></Tab>
@@ -88,7 +100,11 @@
                   </Tab>
                   <Tab text="Settings">
                     <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <JFXTextField fx:id="newBudgetTxt" layoutX="14.0" layoutY="41.0" prefHeight="25.0" prefWidth="276.0" promptText="Set your monthlyBudget" />
+                              <JFXButton layoutX="318.0" layoutY="41.0" onAction="#setNewBudget" prefHeight="25.0" prefWidth="132.0" style="-fx-background-color: #2196f3;" text="Change your budget" textFill="WHITE" />
+                           </children></AnchorPane>
                     </content>
                   </Tab>
                </tabs>

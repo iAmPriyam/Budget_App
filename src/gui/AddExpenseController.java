@@ -3,27 +3,23 @@ package gui;
 import accounts.Account;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
-import database.SqliteConnection;
 import database.SqliteDb;
 import expenses.Expense;
 import expenses.ExpenseCategory;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.stage.Stage;
 import users.User;
 
-import javax.jws.soap.SOAPBinding;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.ResourceBundle;
+import java.util.GregorianCalendar;
+import java.util.logging.Logger;
 
 public class AddExpenseController  {
     User user;
-
+    private static final Logger LOGGER = Logger.getLogger( SqliteDb.class.getName() );
     @FXML
     private JFXTextField expenseNameTxt;
     @FXML
@@ -39,16 +35,16 @@ public class AddExpenseController  {
 
     public void populateData(User user ) {
         this.user = user;
-        this.putCategories();
-        this.putAccounts();
+        this.getCategories();
+        this.getAccounts();
     }
-    private void putCategories(){
+    private void getCategories(){
         SqliteDb db = new SqliteDb();
         ObservableList<ExpenseCategory> expenseCategories = FXCollections.observableList(db.getExpenseCategories());
         db.closeConnection();
         categoryChoiceBox.setItems(expenseCategories);
     }
-    private void putAccounts(){
+    private void getAccounts(){
         ObservableList<Account> accounts = FXCollections.observableArrayList(user.getAccounts());
         accountChoiceBox.setItems(accounts);
     }
@@ -61,10 +57,20 @@ public class AddExpenseController  {
                 expenseNameTxt.getText(),
                 Double.parseDouble(priceTxt.getText()),
                 datePicker.getValue().toString());
-        System.out.println("added new expense to database");
+        LOGGER.info("inserting new expense to database...");
         db.updateAccount(accountChoiceBox.getSelectionModel().getSelectedItem(),
                 accountChoiceBox.getSelectionModel().getSelectedItem().getAccountBalance()-Double.parseDouble(priceTxt.getText()));
         db.closeConnection();
+
+        String[] dateArray = datePicker.getValue().toString().split("-");
+        int dayOfMonth = Integer.parseInt(dateArray[2]);
+        int month = Integer.parseInt(dateArray[1]);
+        int year = Integer.parseInt(dateArray[0]);
+        GregorianCalendar date = new GregorianCalendar(year,month,dayOfMonth);
+        Account account = accountChoiceBox.getSelectionModel().getSelectedItem();
+        //TODO id should be returned from SQLITE
+        account.addExpense(new Expense(100,expenseNameTxt.getText(),Double.parseDouble(priceTxt.getText()),categoryChoiceBox.getSelectionModel().getSelectedItem(),date));
+        LOGGER.info("added new expense");
         Stage stage = (Stage) addExpenseBtn.getScene().getWindow();
         stage.close();
     }

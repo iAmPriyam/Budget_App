@@ -58,14 +58,14 @@ public class SqliteDbTest {
     @Test
     public void isPasswordCorrect1() throws Exception {
         SqliteDb db = new SqliteDb();
-        assertEquals(true,db.isPasswordCorrect("budget"));
+        assertEquals(true,db.validatePassword("budget"));
     }
 
 
     @Test
     public void getUserData() throws Exception {
         SqliteDb db = new SqliteDb();
-        User user = db.getUserData("budget");
+        User user = db.initUserData("budget");
         ArrayList<Account> accounts = user.getAccounts();
         ListIterator<Account> iterator = accounts.listIterator();
         System.out.println(user.getName() + " budget:  " + user.getMonthlyBudget());

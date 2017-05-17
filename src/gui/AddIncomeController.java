@@ -4,7 +4,6 @@ import accounts.Account;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import database.SqliteDb;
-import expenses.ExpenseCategory;
 import incomes.IncomeCategory;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -34,16 +33,16 @@ public class AddIncomeController  {
 
     public void populateData(User user ) {
         this.user = user;
-        this.putCategories();
-        this.putAccounts();
+        this.getCategories();
+        this.getAccounts();
     }
-    private void putCategories(){
+    private void getCategories(){
         SqliteDb db = new SqliteDb();
         ObservableList<IncomeCategory> incomeCategories = FXCollections.observableList(db.getIncomeCategories());
         db.closeConnection();
         categoryChoiceBox.setItems(incomeCategories);
     }
-    private void putAccounts(){
+    private void getAccounts(){
         ObservableList<Account> accounts = FXCollections.observableArrayList(user.getAccounts());
         accountChoiceBox.setItems(accounts);
     }

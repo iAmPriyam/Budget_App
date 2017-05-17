@@ -13,9 +13,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.logging.Logger;
 
 public class SqliteDb {
-
+    private static final Logger LOGGER = Logger.getLogger( SqliteDb.class.getName() );
     private Connection connection;
 
     /**
@@ -54,19 +55,21 @@ public class SqliteDb {
      * @param password password to verify
      * @return true - password correct false - password incorrect
      */
-    public boolean isPasswordCorrect(String password) {
+    public boolean validatePassword(String password) {
         String query = "SELECT * FROM users WHERE password = ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1,password);
             ResultSet resultSet = preparedStatement.executeQuery();
             if(resultSet.next()) {
+                LOGGER.info("validated password");
                 return true;
             } else {
+                LOGGER.info("incorrect password");
                 return false;
             }
         } catch (SQLException e) {
-            System.out.println(e);
+            LOGGER.info(e.toString());
             return false;
         }
     }
@@ -77,7 +80,7 @@ public class SqliteDb {
      * @param password
      * @return User object with all attributes that are stored in database
      */
-    public User getUserData(String password) {
+    public User initUserData(String password) {
         String query = "SELECT * FROM users WHERE password = ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
@@ -85,16 +88,20 @@ public class SqliteDb {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if(resultSet.next()) {
-                User user = new User(resultSet.getString("name"),resultSet.getInt("id"),resultSet.getDouble("monthlyBudget"));
-                ArrayList<Account> accounts = this.getAccounts(user.getId());
-                user.setAccounts(accounts);
-                return user;
+                User.initializeUser(resultSet.getString("name"),
+                        resultSet.getInt("id"),
+                        resultSet.getDouble("monthlyBudget"));
+                ArrayList<Account> accounts = this.getAccounts(User.getInstance().getId());
+                User.getInstance().setAccounts(accounts);
+                LOGGER.info("user initialization finished");
+                return User.getInstance();
             }
             else {
+                LOGGER.warning("user initialization failed");
                 return null;
             }
         } catch (SQLException e) {
-            System.out.println(e);
+            LOGGER.warning("Error occurred: " + e);
             return null;
         }
     }
@@ -115,14 +122,14 @@ public class SqliteDb {
                 int accountId = resultSet.getInt("id");
                 String accountName = resultSet.getString("name");
                 double accountBalance = resultSet.getDouble("balance");
-                Account account = new Account(accountId, accountName,accountBalance);
+                Account account = new Account(accountId, accountName, accountBalance);
                 account.setExpensesList(this.getAccountExpenses(account.getId()));
                 account.setIncomesList(this.getAccountIncomes(account.getId()));
                 accounts.add(account);
             }
             return accounts;
         } catch (SQLException e) {
-            System.out.println(e);
+            LOGGER.warning("Error occurred: " + e);
             return null;
         }
     }
@@ -171,7 +178,7 @@ public class SqliteDb {
             categoriesSet.close();
             return expenses;
         } catch (SQLException e) {
-            System.out.println(e);
+            LOGGER.warning("Error occurred: " + e);
             return null;
         }
     }
@@ -215,7 +222,7 @@ public class SqliteDb {
             preparedStatement.close();
             return incomes;
         } catch(SQLException exc) {
-            System.out.println(exc);
+            LOGGER.warning("Error occurred: " + exc);
             return null;
         }
     }
@@ -228,8 +235,9 @@ public class SqliteDb {
             preparedStatement.setString(2,accountName);
             preparedStatement.setDouble(3,accountBalance);
             preparedStatement.executeUpdate();
+            LOGGER.info("new account added to database");
         } catch (SQLException exc) {
-            System.out.println(exc);
+            LOGGER.warning("Error occurred: " + exc);
         }
     }
     @SuppressWarnings("Duplicates")
@@ -244,8 +252,9 @@ public class SqliteDb {
             preparedStatement.setString(5,date);
             preparedStatement.executeUpdate();
             preparedStatement.close();
+            LOGGER.info("new expense added to database");
         } catch (SQLException exc) {
-            System.out.println(exc);
+            LOGGER.warning("Error occurred: " + exc);
         }
     }
     @SuppressWarnings("Duplicates")
@@ -260,8 +269,9 @@ public class SqliteDb {
             preparedStatement.setString(5,date);
             preparedStatement.executeUpdate();
             preparedStatement.close();
+            LOGGER.info("new income added to database");
         }catch (SQLException exc) {
-            System.out.println(exc);
+            LOGGER.warning("Error occurred: " + exc);
         }
     }
     //DATABASE UPDATE
@@ -281,7 +291,7 @@ public class SqliteDb {
             preparedStatement.executeUpdate();
             preparedStatement.close();
         } catch (SQLException exc) {
-            System.out.println(exc);
+            LOGGER.warning("Error occurred: " + exc);
         }
     }
 
@@ -331,7 +341,7 @@ public class SqliteDb {
             preparedStatement.executeUpdate();
             preparedStatement.close();
         } catch (SQLException exc) {
-            System.out.println(exc);
+            LOGGER.warning("Error occurred: " + exc);
         }
     }
     public ArrayList<ExpenseCategory> getExpenseCategories() {
@@ -349,7 +359,7 @@ public class SqliteDb {
             return categories;
 
         } catch (SQLException exc) {
-            System.out.println(exc);
+            LOGGER.warning("Error occurred: " + exc);
             return null;
         }
     }
@@ -367,7 +377,7 @@ public class SqliteDb {
             }
             return categories;
         } catch (SQLException exc) {
-            System.out.println(exc);
+            LOGGER.warning("Error occurred: " + exc);
             return null;
         }
     }

@@ -1,25 +1,33 @@
 package users;
 
 import accounts.Account;
+import expenses.Expense;
+
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 public class User {
+    private static User user;
+
     private int id;
     private String name;
     private ArrayList<Account> accounts;
     private double monthlyBudget;
 
-    public User(String name,int id){
-        this.id = id;
-        this.name = name;
-        accounts = new ArrayList<>();
-        monthlyBudget = 0;
-    }
-    public User(String name,int id,double monthlyBudget){
+
+    private User(String name,int id,double monthlyBudget){
         this.id = id;
         this.name = name;
         this.accounts = new ArrayList<>();
         this.monthlyBudget = monthlyBudget;
+    }
+
+    public static void initializeUser(String name,int id,double monthlyBudget) {
+        user = new User(name,id,monthlyBudget);
+    }
+    public static User getInstance() {
+        return user;
     }
 
     public double getMonthlyBudget() {
@@ -59,5 +67,40 @@ public class User {
 
     public ArrayList<Account> getAccounts() {
         return accounts;
+    }
+    public ArrayList<Expense> getMonthlyExpenses(){
+        ArrayList<Expense> expenses = new ArrayList<>();
+        GregorianCalendar date = new GregorianCalendar();
+        int month = date.get(Calendar.MONTH);
+        for(Account account: accounts) {
+            for(Expense expense: account.getExpensesList()) {
+                if(expense.getDate().get(Calendar.MONTH)==month+1) {
+                    expenses.add(expense);
+                }
+            }
+        }
+        return expenses;
+    }
+
+    public ArrayList<Expense> getMonthlyExpenses(int month){
+        ArrayList<Expense> expenses = new ArrayList<>();
+        for(Account account: accounts) {
+            for(Expense expense: account.getExpensesList()) {
+                if(expense.getDate().get(Calendar.MONTH)==month+1) {
+                    expenses.add(expense);
+                }
+            }
+        }
+        return expenses;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", accounts=" + accounts +
+                ", monthlyBudget=" + monthlyBudget +
+                '}';
     }
 }
