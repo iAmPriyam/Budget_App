@@ -4,6 +4,7 @@ import accounts.Account;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import database.SqliteDb;
+import incomes.Income;
 import incomes.IncomeCategory;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,8 +15,12 @@ import javafx.scene.control.DatePicker;
 import javafx.stage.Stage;
 import users.User;
 
+import java.util.GregorianCalendar;
+import java.util.logging.Logger;
+
 
 public class AddIncomeController  {
+    private static final Logger LOGGER = Logger.getLogger( SqliteDb.class.getName() );
     User user;
 
     @FXML
@@ -44,6 +49,7 @@ public class AddIncomeController  {
     }
     private void getAccounts(){
         ObservableList<Account> accounts = FXCollections.observableArrayList(user.getAccounts());
+        System.out.println(accounts);
         accountChoiceBox.setItems(accounts);
     }
 
@@ -55,6 +61,14 @@ public class AddIncomeController  {
         db.updateAccount(accountChoiceBox.getSelectionModel().getSelectedItem(),
                 accountChoiceBox.getSelectionModel().getSelectedItem().getAccountBalance()+Double.parseDouble(moneyTxt.getText()));
         db.closeConnection();
+        String[] dateArray = datePicker.getValue().toString().split("-");
+        int dayOfMonth = Integer.parseInt(dateArray[2]);
+        int month = Integer.parseInt(dateArray[1]);
+        int year = Integer.parseInt(dateArray[0]);
+        GregorianCalendar date = new GregorianCalendar(year,month,dayOfMonth);
+        Account account = accountChoiceBox.getSelectionModel().getSelectedItem();
+        account.addIncome(new Income(100,incomeNameTxt.getText(),Double.parseDouble(moneyTxt.getText()),categoryChoiceBox.getSelectionModel().getSelectedItem(),date));
+        LOGGER.info("added new income");
         Stage stage = (Stage) addIncomeBtn.getScene().getWindow();
         stage.close();
     }

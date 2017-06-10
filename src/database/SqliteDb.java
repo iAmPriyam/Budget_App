@@ -1,6 +1,8 @@
 package database;
 
 import accounts.Account;
+import accounts.CreditAccount;
+import accounts.SavingAccount;
 import expenses.Expense;
 import expenses.ExpenseCategory;
 import incomes.Income;
@@ -122,10 +124,35 @@ public class SqliteDb {
                 int accountId = resultSet.getInt("id");
                 String accountName = resultSet.getString("name");
                 double accountBalance = resultSet.getDouble("balance");
-                Account account = new Account(accountId, accountName, accountBalance);
-                account.setExpensesList(this.getAccountExpenses(account.getId()));
-                account.setIncomesList(this.getAccountIncomes(account.getId()));
-                accounts.add(account);
+                int type = resultSet.getInt("type");
+                if(type==1) {
+                    Account account = new Account(accountId, accountName, accountBalance);
+                    account.setExpensesList(this.getAccountExpenses(account.getId()));
+                    account.setIncomesList(this.getAccountIncomes(account.getId()));
+                    accounts.add(account);
+                } else if(type==2) {
+                    Account account = new CreditAccount
+                            (accountId,accountName,accountBalance, resultSet.getDouble("interest"));
+                    account.setExpensesList(this.getAccountExpenses(account.getId()));
+                    account.setIncomesList(this.getAccountIncomes(account.getId()));
+                    accounts.add(account);
+                } else if(type==3) {
+                    String string = resultSet.getString("lastCapitalizationDate");
+                    String[] date = string.split("-");
+                    int dayOfMonth = Integer.parseInt(date[2]);
+                    int month = Integer.parseInt(date[1]);
+                    int year = Integer.parseInt(date[0]);
+                    GregorianCalendar lastCapitalizatoonDate  = new GregorianCalendar(year,month,dayOfMonth);
+
+                    Account account = new SavingAccount
+                            (accountId,accountName,accountBalance,resultSet.getDouble("interest"),lastCapitalizatoonDate,resultSet.getInt("capitalizationPeriod"));
+                    account.setExpensesList(this.getAccountExpenses(account.getId()));
+                    account.setIncomesList(this.getAccountIncomes(account.getId()));
+                    accounts.add(account);
+                }
+            }
+            for(Account acc : accounts) {
+                System.out.println(acc);
             }
             return accounts;
         } catch (SQLException e) {
@@ -379,6 +406,30 @@ public class SqliteDb {
         } catch (SQLException exc) {
             LOGGER.warning("Error occurred: " + exc);
             return null;
+        }
+    }
+    @SuppressWarnings("Duplicates")
+    public void removeIncome(Income income) {
+        String query = "DELETE FROM incomes WHERE id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1,income.getId());
+            preparedStatement.execute();
+            preparedStatement.close();
+        } catch (SQLException exc) {
+            System.out.println(exc);
+        }
+    }
+    @SuppressWarnings("Duplicates")
+    public void removeExpense(Expense expense) {
+        String query = "DELETE FROM expenses WHERE id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1,expense.getId());
+            preparedStatement.execute();
+            preparedStatement.close();
+        } catch (SQLException exc) {
+            System.out.println(exc);
         }
     }
 }

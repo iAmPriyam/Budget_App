@@ -4,6 +4,9 @@ import accounts.Account;
 import com.jfoenix.controls.*;
 import database.SqliteDb;
 import expenses.Expense;
+import expenses.ExpenseCategory;
+import incomes.Income;
+import incomes.IncomeCategory;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -29,6 +32,7 @@ public class MainSceneController  {
 
     User user;
     double moneySpentThisMonth;
+
     //OVERVIEW TAB'S ELEMENTS
     @FXML
     private LineChart<?, ?> monthlyLineChart;
@@ -61,23 +65,55 @@ public class MainSceneController  {
     @FXML
     private JFXTextField inc_expRatingTxt;
 
+    //Incomes
+    @FXML
+    private TableView<Income> AllIncomesTable;
+    @FXML
+    private TableColumn<Account,String> IncomeNameColumn;
+    @FXML
+    private TableColumn<Account,GregorianCalendar> IncomeDateColumn;
+    @FXML
+    private TableColumn<Account,Double> IncomeMoneyColumn;
+    @FXML
+    private TableColumn<Account,IncomeCategory> IncomeCategoryColumn;
+
+    //Expenses
+    @FXML
+    private TableView<Expense> AllExpenseTable;
+    @FXML
+    private TableColumn<Account,String> ExpenseNameColumn;
+    @FXML
+    private TableColumn<Account,GregorianCalendar> ExpenseDateColumn;
+    @FXML
+    private TableColumn<Account,Double> ExpensePriceColumn;
+    @FXML
+    private TableColumn<Account, ExpenseCategory> ExpenseCategoryColumn;
+
     //SETTING TAB'S ELEMENTS
     @FXML
     private JFXTextField newBudgetTxt;
 
+
+
     public void fillMainScene() {
         this.user = User.getInstance();
         if(this.user!=null) {
-            this.setAccountsTable();
-            this.setTotalBalanceLbl();
-            this.fillLineChart();
-            this.setPieChart();
+            this.setOverviewTab();
+            this.setStatisticTab();
+            this.setAllIncomesTable();
+            this.setAllExpensesTable();
         } else {
 
         }
     }
 
     //METHODS TO FILL MAINSCENE
+    private void setOverviewTab(){
+        this.setAccountsTable();
+        this.setTotalBalanceLbl();
+        this.fillLineChart();
+    }
+
     private void setAccountsTable() {
         ObservableList<Account> accountObservableList = FXCollections.observableArrayList();
         for(Account account: user.getAccounts()) {
@@ -91,19 +127,10 @@ public class MainSceneController  {
     }
 
     private void setTotalBalanceLbl() {
-        double balance = this.computeTotalBalance();
+        double balance = this.user.getTotalBalance();
         DecimalFormat formatter = new DecimalFormat("#0.00");
         totalBalanceLbl.setText(formatter.format(balance)+" PLN");
     }
-    
-    private double computeTotalBalance(){
-        double totalBalance = 0;
-        for(Account account: user.getAccounts()) {
-            totalBalance +=account.getAccountBalance();
-        }
-        return totalBalance;
-    }
-
     private void fillLineChart() {
 
         XYChart.Series monthlyBudget = new XYChart.Series();
@@ -139,6 +166,12 @@ public class MainSceneController  {
     
     //MONTHLY OVERVIEW METHODS
 
+    public void setStatisticTab(){
+        setPieChart();
+        setBudgetProgressBar();
+        setMonthlyBudgetDetails();
+    }
+
     public void addExpense() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("addExpenseDialog.fxml"));
@@ -173,9 +206,9 @@ public class MainSceneController  {
         }
     }
 
-    public void setPieChart() {
+    private void setPieChart() {
         ArrayList<Expense> allExpenses = user.getMonthlyExpenses();
-        GregorianCalendar date = new GregorianCalendar();
+
         HashMap<String,Double> pieChartData = new HashMap<>();
         for(Expense expense : allExpenses) {
             if(pieChartData.containsKey(expense.getCategory().getName())) {
@@ -193,14 +226,90 @@ public class MainSceneController  {
         });
 
         expensesPieChart.setLegendSide(Side.LEFT);
+    }
+
+    private void setBudgetProgressBar() {
         budgetProgressBar.setProgress(moneySpentThisMonth /user.getMonthlyBudget());
         DecimalFormat formatter = new DecimalFormat("#0.00");
-        budgetPercentTxt.setText(formatter.format(moneySpentThisMonth /user.getMonthlyBudget())+" % of monthly budget");
+        budgetPercentTxt.setText(formatter.format(moneySpentThisMonth*100 /user.getMonthlyBudget())+" % of monthly budget");
+    }
+
+    private void setMonthlyBudgetDetails() {
+        DecimalFormat formatter = new DecimalFormat("#0.00");
         moneyLeftTxt.setText(formatter.format(user.getMonthlyBudget()- moneySpentThisMonth));
-        GregorianCalendar date2 = new GregorianCalendar();
+        GregorianCalendar date = new GregorianCalendar();
         int dayLeft = date.getActualMaximum(Calendar.DAY_OF_MONTH)-date.get(Calendar.DAY_OF_MONTH)+1;
         double moneyPerDay = (user.getMonthlyBudget()- moneySpentThisMonth)/dayLeft;
         moneyPerDayTxt.setText(formatter.format(moneyPerDay));
+    }
+
+    //INCOMES METHODS
+    // all incomes
+
+    private void setAllIncomesTable(){
+        ObservableList<Income> incomesObservableList = FXCollections.observableArrayList();
+        for(Account account: user.getAccounts()) {
+            for(Income income : account.getIncomesList()) {
+                AllIncomesTable.getItems().add(income);
+                incomesObservableList.add(income);
+            }
+        }
+        IncomeNameColumn.setCellValueFactory
+                (new PropertyValueFactory<Account, String>("name"));
+        IncomeDateColumn.setCellValueFactory
+                (new PropertyValueFactory<Account, GregorianCalendar>("date"));
+        IncomeMoneyColumn.setCellValueFactory
+                (new PropertyValueFactory<Account, Double>("money"));
+        IncomeCategoryColumn.setCellValueFactory
+                (new PropertyValueFactory<Account, IncomeCategory>("category"));
+    }
+
+    public void removeIncome(){
+        Income income = AllIncomesTable.getSelectionModel().getSelectedItem();
+        one:for(Account account: this.user.getAccounts()) {
+            for(Income i : account.getIncomesList()) {
+                if(i==income) {
+                    account.removeIncome(income);
+
+                    break one;
+                }
+            }
+        }
+        this.refresh();
+    }
+
+    //EXPENSES METHODS
+
+    private void setAllExpensesTable(){
+        ObservableList<Expense> expensesObservableList = FXCollections.observableArrayList();
+        for(Account account: user.getAccounts()) {
+            for(Expense expense : account.getExpensesList()) {
+                AllExpenseTable.getItems().add(expense);
+                expensesObservableList.add(expense);
+            }
+        }
+        ExpenseNameColumn.setCellValueFactory
+                (new PropertyValueFactory<Account, String>("name"));
+        ExpenseDateColumn.setCellValueFactory
+                (new PropertyValueFactory<Account, GregorianCalendar>("date"));
+        ExpensePriceColumn.setCellValueFactory
+                (new PropertyValueFactory<Account, Double>("price"));
+        ExpenseCategoryColumn.setCellValueFactory
+                (new PropertyValueFactory<Account, ExpenseCategory>("category"));
+
+    }
+
+    public void removeExpense() {
+        Expense expense = AllExpenseTable.getSelectionModel().getSelectedItem();
+        one:for(Account account : this.user.getAccounts()) {
+            for(Expense e : account.getExpensesList()) {
+                if(e == expense) {
+                    account.removeExpense(expense);
+                    break one;
+                }
+            }
+        }
+        this.refresh();
     }
 
     //SETTING METHODS
@@ -223,9 +332,10 @@ public class MainSceneController  {
         monthlyLineChart.getData().clear();
         AccountsTable.getItems().clear();
         expensesPieChart.getData().clear();
+        AllExpenseTable.getItems().clear();
+        AllIncomesTable.getItems().clear();
         this.fillMainScene();
         db.closeConnection();
     }
-
 
 }

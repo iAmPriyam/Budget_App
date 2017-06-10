@@ -68,9 +68,9 @@ public class AddExpenseController  {
         int year = Integer.parseInt(dateArray[0]);
         GregorianCalendar date = new GregorianCalendar(year,month,dayOfMonth);
         Account account = accountChoiceBox.getSelectionModel().getSelectedItem();
-        //TODO id should be returned from SQLITE
         account.addExpense(new Expense(100,expenseNameTxt.getText(),Double.parseDouble(priceTxt.getText()),categoryChoiceBox.getSelectionModel().getSelectedItem(),date));
         LOGGER.info("added new expense");
+
         Stage stage = (Stage) addExpenseBtn.getScene().getWindow();
         stage.close();
     }

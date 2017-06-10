@@ -9,6 +9,7 @@
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TableColumn?>
@@ -90,12 +91,63 @@
                      </content></Tab>
                   <Tab text="Incomes">
                     <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <JFXTabPane prefHeight="511.0" prefWidth="550.0">
+                                 <tabs>
+                                    <Tab text="All Incomes">
+                                      <content>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="269.0">
+                                             <children>
+                                                <TableView fx:id="AllIncomesTable" layoutY="-3.0" prefHeight="446.0" prefWidth="550.0">
+                                                  <columns>
+                                                    <TableColumn fx:id="IncomeNameColumn" prefWidth="140.0" text="Name" />
+                                                    <TableColumn fx:id="IncomeDateColumn" minWidth="0.0" prefWidth="140.0" text="Date" />
+                                                      <TableColumn fx:id="IncomeMoneyColumn" minWidth="3.0" prefWidth="130.0" text="Money" />
+                                                      <TableColumn fx:id="IncomeCategoryColumn" prefWidth="150.0" text="Category" />
+                                                  </columns>
+                                                </TableView>
+                                                <Button layoutX="229.0" layoutY="443.0" mnemonicParsing="false" onAction="#removeIncome" text="Delete Income" />
+                                             </children>
+                                          </AnchorPane>
+                                      </content>
+                                    </Tab>
+                                    <Tab text="Regular Incomes" />
+                                 </tabs>
+                              </JFXTabPane>
+                           </children></AnchorPane>
                     </content>
                   </Tab>
                   <Tab text="Expenses">
                     <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <JFXTabPane prefHeight="516.0" prefWidth="550.0">
+                                 <tabs>
+                                    <Tab text="All Expenses">
+                                      <content>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                             <children>
+                                                <TableView fx:id="AllExpenseTable" layoutX="-2.0" prefHeight="439.0" prefWidth="550.0">
+                                                  <columns>
+                                                    <TableColumn fx:id="ExpenseNameColumn" prefWidth="140.0" text="Name" />
+                                                    <TableColumn fx:id="ExpenseDateColumn" prefWidth="140.0" text="Date" />
+                                                      <TableColumn fx:id="ExpensePriceColumn" prefWidth="130.0" text="Price" />
+                                                      <TableColumn fx:id="ExpenseCategoryColumn" prefWidth="140.0" text="Category" />
+                                                  </columns>
+                                                </TableView>
+                                                <Button layoutX="227.0" layoutY="439.0" mnemonicParsing="false" onAction="#removeExpense" text="Delete Expense" />
+                                             </children></AnchorPane>
+                                      </content>
+                                    </Tab>
+                                    <Tab text="Regular Expenses">
+                                      <content>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                      </content>
+                                    </Tab>
+                                 </tabs>
+                              </JFXTabPane>
+                           </children></AnchorPane>
                     </content>
                   </Tab>
                   <Tab text="Settings">

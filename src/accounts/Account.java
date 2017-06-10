@@ -1,5 +1,6 @@
 package accounts;
 
+import database.SqliteDb;
 import expenses.Expense;
 import incomes.Income;
 
@@ -41,6 +42,9 @@ public class Account {
     public void removeExpense(Expense expense) {
         expensesList.remove(expense);
         this.increaseAccountBalance(expense.getPrice());
+        SqliteDb db = new SqliteDb();
+        db.removeExpense(expense);
+        db.closeConnection();
     }
 
     public void addIncome(Income income) {
@@ -51,6 +55,9 @@ public class Account {
     public void removeIncome(Income income) {
         incomesList.remove(income);
         this.reduceAccountBalance(income.getMoney());
+        SqliteDb db = new SqliteDb();
+        db.removeIncome(income);
+        db.closeConnection();
     }
 
     public int getId() {
@@ -83,12 +90,6 @@ public class Account {
 
     @Override
     public String toString() {
-        return "Account{" +
-                "id=" + id +
-                ", accountName='" + accountName + '\'' +
-                ", accountBalance=" + accountBalance +
-                ", expensesList=" + expensesList +
-                ", incomesList=" + incomesList +
-                '}';
+        return accountName + " " + accountBalance;
     }
 }

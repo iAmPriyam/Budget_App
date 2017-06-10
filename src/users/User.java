@@ -2,12 +2,12 @@ package users;
 
 import accounts.Account;
 import expenses.Expense;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 public class User {
+
     private static User user;
 
     private int id;
@@ -26,6 +26,7 @@ public class User {
     public static void initializeUser(String name,int id,double monthlyBudget) {
         user = new User(name,id,monthlyBudget);
     }
+
     public static User getInstance() {
         return user;
     }
@@ -36,6 +37,14 @@ public class User {
 
     public void setMonthlyBudget(double money) {
         this.monthlyBudget = money;
+    }
+
+    public double getTotalBalance() {
+        double result = 0;
+        for(Account account : this.accounts){
+            result += account.getAccountBalance();
+        }
+        return result;
     }
 
     public int getId() {
