@@ -112,7 +112,25 @@
                                           </AnchorPane>
                                       </content>
                                     </Tab>
-                                    <Tab text="Regular Incomes" />
+                                    <Tab text="Regular Incomes">
+                                       <content>
+                                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="269.0">
+                                             <children>
+                                                <TableView fx:id="RegIncomesTable" layoutY="-3.0" prefHeight="446.0" prefWidth="550.0">
+                                                   <columns>
+                                                      <TableColumn fx:id="RegIncomesColumnName" prefWidth="80.6666259765625" text="Name" />
+                                                      <TableColumn fx:id="RegIncomesColumnDate" minWidth="0.0" prefWidth="75.666748046875" text="Date" />
+                                                      <TableColumn fx:id="RegIncomesColumnMoney" minWidth="3.0" prefWidth="74.666748046875" text="Money" />
+                                                      <TableColumn fx:id="RegIncomesColumnCategory" prefWidth="94.66650390625" text="Category" />
+                                                      <TableColumn fx:id="RegIncomesColumnLastIncome" prefWidth="106.333251953125" text="Last Income Date" />
+                                                      <TableColumn fx:id="RegIncomesColumnFrequency" prefWidth="114.666748046875" text="Frequency" />
+                                                   </columns>
+                                                </TableView>
+                                                <Button layoutX="229.0" layoutY="443.0" mnemonicParsing="false" text="Delete Income" />
+                                             </children>
+                                          </AnchorPane>
+                                       </content>
+                                    </Tab>
                                  </tabs>
                               </JFXTabPane>
                            </children></AnchorPane>
@@ -142,7 +160,19 @@
                                     </Tab>
                                     <Tab text="Regular Expenses">
                                       <content>
-                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                             <children>
+                                                <TableView fx:id="RegExpenseTable" layoutX="-1.0" prefHeight="450.0" prefWidth="550.0">
+                                                  <columns>
+                                                    <TableColumn fx:id="RegExpColumnName" prefWidth="75.0" text="Name" />
+                                                    <TableColumn fx:id="RegExpColumnDate" prefWidth="67.0" text="Date" />
+                                                      <TableColumn fx:id="RegExpColumnPrice" prefWidth="62.0" text="Price" />
+                                                      <TableColumn fx:id="RegExpColumnCategory" prefWidth="76.0" text="Category" />
+                                                      <TableColumn fx:id="RegExpColumnLastExpense" prefWidth="129.0" text="last Expense date" />
+                                                      <TableColumn fx:id="RegExpColumnFrequency" prefWidth="65.0" text="Frequency" />
+                                                  </columns>
+                                                </TableView>
+                                             </children></AnchorPane>
                                       </content>
                                     </Tab>
                                  </tabs>

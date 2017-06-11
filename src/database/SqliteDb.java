@@ -5,8 +5,10 @@ import accounts.CreditAccount;
 import accounts.SavingAccount;
 import expenses.Expense;
 import expenses.ExpenseCategory;
+import expenses.RegularExpense;
 import incomes.Income;
 import incomes.IncomeCategory;
+import incomes.RegularIncome;
 import users.User;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -96,6 +98,11 @@ public class SqliteDb {
                 ArrayList<Account> accounts = this.getAccounts(User.getInstance().getId());
                 User.getInstance().setAccounts(accounts);
                 LOGGER.info("user initialization finished");
+                for(Account acc: User.getInstance().getAccounts()) {
+                    for( RegularIncome i : acc.getRegularIncomesList()) {
+                        System.out.println(i);
+                    }
+                }
                 return User.getInstance();
             }
             else {
@@ -128,13 +135,17 @@ public class SqliteDb {
                 if(type==1) {
                     Account account = new Account(accountId, accountName, accountBalance);
                     account.setExpensesList(this.getAccountExpenses(account.getId()));
+                    account.setRegularExpensesList(this.getAccountRegularExpenses(account.getId()));
                     account.setIncomesList(this.getAccountIncomes(account.getId()));
+                    account.setRegularIncomesList(this.getAccountRegularIncomes(accountId));
                     accounts.add(account);
                 } else if(type==2) {
                     Account account = new CreditAccount
                             (accountId,accountName,accountBalance, resultSet.getDouble("interest"));
                     account.setExpensesList(this.getAccountExpenses(account.getId()));
+                    account.setRegularExpensesList(this.getAccountRegularExpenses(account.getId()));
                     account.setIncomesList(this.getAccountIncomes(account.getId()));
+                    account.setRegularIncomesList(this.getAccountRegularIncomes(accountId));
                     accounts.add(account);
                 } else if(type==3) {
                     String string = resultSet.getString("lastCapitalizationDate");
@@ -142,15 +153,17 @@ public class SqliteDb {
                     int dayOfMonth = Integer.parseInt(date[2]);
                     int month = Integer.parseInt(date[1]);
                     int year = Integer.parseInt(date[0]);
-                    GregorianCalendar lastCapitalizatoonDate  = new GregorianCalendar(year,month,dayOfMonth);
+                    GregorianCalendar lastCapitalizationDate  = new GregorianCalendar(year,month,dayOfMonth);
 
                     Account account = new SavingAccount
-                            (accountId,accountName,accountBalance,resultSet.getDouble("interest"),lastCapitalizatoonDate,resultSet.getInt("capitalizationPeriod"));
+                            (accountId,accountName,accountBalance,resultSet.getDouble("interest"),lastCapitalizationDate,resultSet.getInt("capitalizationPeriod"));
                     account.setExpensesList(this.getAccountExpenses(account.getId()));
+                    account.setRegularExpensesList(this.getAccountRegularExpenses(account.getId()));
                     account.setIncomesList(this.getAccountIncomes(account.getId()));
+                    account.setRegularIncomesList(this.getAccountRegularIncomes(accountId));
                     accounts.add(account);
                 }
-            }
+                }
             for(Account acc : accounts) {
                 System.out.println(acc);
             }
@@ -165,6 +178,7 @@ public class SqliteDb {
      * @param id
      * @return
      */
+    @SuppressWarnings("Duplicates")
     private ArrayList<Expense> getAccountExpenses(int id) {
         String expensesQuery = "SELECT * FROM expenses WHERE account_id = ?";
         String categoriesQuery = "SELECT * FROM expensesCategories";
@@ -209,6 +223,60 @@ public class SqliteDb {
             return null;
         }
     }
+    @SuppressWarnings("Duplicates")
+    private ArrayList<RegularExpense> getAccountRegularExpenses(int id) {
+        String regularExpensesQuery = "SELECT * FROM regularExpenses WHERE account_id = ?";
+        String categoriesQuery = "SELECT * FROM expensesCategories";
+        String accountId = Integer.toString(id);
+        try {
+            PreparedStatement ps = connection.prepareStatement(categoriesQuery);
+            ResultSet categoriesSet = ps.executeQuery();
+            HashMap<Integer,ExpenseCategory> categories = new HashMap<>();
+            while(categoriesSet.next()) {
+                int categoryId = categoriesSet.getInt("id");
+                String categoryName = categoriesSet.getString("name");
+                categories.put(categoryId,new ExpenseCategory(categoryName,categoryId));
+            }
+
+            PreparedStatement preparedStatement = connection.prepareStatement(regularExpensesQuery);
+            preparedStatement.setString(1,accountId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            ArrayList<RegularExpense> regularExpenses = new ArrayList<>();
+
+            while(resultSet.next()) {
+                int expenseId = resultSet.getInt("id");
+                String expenseName = resultSet.getString("name");
+                double expensePrice = resultSet.getDouble("price");
+                int expenseCategoryId = resultSet.getInt("category_id");
+                String expenseDate = resultSet.getString("date");
+                String[] date = expenseDate.split("-");
+                int dayOfMonth = Integer.parseInt(date[2]);
+                int month = Integer.parseInt(date[1]);
+                int year = Integer.parseInt(date[0]);
+                GregorianCalendar expDate = new GregorianCalendar(year,month,dayOfMonth);
+                ExpenseCategory category = categories.get(expenseCategoryId);
+                int expenseFrequency = resultSet.getInt("frequency");
+                int expenseAccountId = resultSet.getInt("account_id");
+                String lastExpenseDate = resultSet.getString(("lastExpense"));
+                String[] date2 = lastExpenseDate.split("-");
+                int dayOfMonth2 = Integer.parseInt(date2[2]);
+                int month2 = Integer.parseInt(date2[1]);
+                int year2 = Integer.parseInt(date2[0]);
+                GregorianCalendar lastExpense = new GregorianCalendar(year2,month2,dayOfMonth2);
+                RegularExpense expense = new RegularExpense(expenseId,expenseName,expensePrice,category,expDate,expenseFrequency,expenseAccountId,lastExpense);
+                regularExpenses.add(expense);
+            }
+            ps.close();
+            preparedStatement.close();
+            resultSet.close();
+            categoriesSet.close();
+            return regularExpenses;
+        } catch (SQLException e) {
+            LOGGER.warning("Error occurred: " + e);
+            return null;
+        }
+    }
+    @SuppressWarnings("Duplicates")
     private ArrayList<Income> getAccountIncomes(int id) {
         String accountId = Integer.toString(id);
         String categoriesQuery = "SELECT * FROM incomesCategories";
@@ -248,6 +316,60 @@ public class SqliteDb {
             incomesSet.close();
             preparedStatement.close();
             return incomes;
+        } catch(SQLException exc) {
+            LOGGER.warning("Error occurred: " + exc);
+            return null;
+        }
+    }
+    @SuppressWarnings("Duplicates")
+    private ArrayList<RegularIncome> getAccountRegularIncomes(int id) {
+        String accountId = Integer.toString(id);
+        String categoriesQuery = "SELECT * FROM incomesCategories";
+        String incomeQuery = "SELECT * FROM regularIncomes WHERE account_id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(categoriesQuery);
+            ResultSet categoriesSet = preparedStatement.executeQuery();
+            HashMap<Integer, IncomeCategory> categories = new HashMap<>();
+            while(categoriesSet.next()) {
+                int categoryId = categoriesSet.getInt("id");
+                String categoryName = categoriesSet.getString("name");
+                categories.put(categoryId,new IncomeCategory(categoryId,categoryName));
+            }
+            PreparedStatement preparedStatement1 = connection.prepareStatement(incomeQuery);
+            preparedStatement1.setString(1,accountId);
+            ResultSet incomesSet = preparedStatement1.executeQuery();
+            ArrayList<RegularIncome> regularIncomes = new ArrayList<>();
+
+            while(incomesSet.next()) {
+                int incomeId = incomesSet.getInt("id");
+                int incomeCategoryId = incomesSet.getInt("category_id");
+                String incomeName = incomesSet.getString("name");
+                double incomeMoney = incomesSet.getDouble("money");
+                String incomeDate = incomesSet.getString("date");
+                String[] date = incomeDate.split("-|\\.");
+                int year = Integer.parseInt(date[0]);
+                int month = Integer.parseInt(date[1]);
+                int dayOfMonth = Integer.parseInt(date[2]);
+                GregorianCalendar incDate = new GregorianCalendar(year,month,dayOfMonth);
+                IncomeCategory category = categories.get(incomeCategoryId);
+                int incomeFrequency = incomesSet.getInt("frequency");
+                int incomeAccountId = incomesSet.getInt("account_id");
+                String lastExpenseDate = incomesSet.getString(("lastIncome"));
+                String[] date2 = lastExpenseDate.split("-");
+                int dayOfMonth2 = Integer.parseInt(date2[2]);
+                int month2 = Integer.parseInt(date2[1]);
+                int year2 = Integer.parseInt(date2[0]);
+                GregorianCalendar lastIncome = new GregorianCalendar(year2,month2,dayOfMonth2);
+                RegularIncome income = new RegularIncome(incomeId,incomeName,incomeMoney,category,incDate,incomeFrequency,incomeAccountId,lastIncome);
+                regularIncomes.add(income);
+                System.out.println(regularIncomes);
+            }
+            preparedStatement1.close();
+            categoriesSet.close();
+            incomesSet.close();
+            preparedStatement.close();
+
+            return regularIncomes;
         } catch(SQLException exc) {
             LOGGER.warning("Error occurred: " + exc);
             return null;
@@ -301,6 +423,45 @@ public class SqliteDb {
             LOGGER.warning("Error occurred: " + exc);
         }
     }
+    @SuppressWarnings("Duplicates")
+    public void insertRegularIncome(int account_id, int category_id, String name, double money, String date, int frequency, String lastIncome) {
+        String query = "INSERT INTO regularIncomes (account_id, category_id, name, money, date, frequency, lastIncome) VALUES(?,?,?,?,?,?,?)";
+        try{
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1,account_id);
+            preparedStatement.setInt(2,category_id);
+            preparedStatement.setString(3,name);
+            preparedStatement.setDouble(4,money);
+            preparedStatement.setString(5,date);
+            preparedStatement.setInt(6,frequency);
+            preparedStatement.setString(7,lastIncome);
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+            System.out.println("addes regular income");
+        } catch (SQLException exc) {
+            LOGGER.warning("Error occurred: " + exc);
+        }
+    }
+    @SuppressWarnings("Duplicates")
+    public void insertRegularExpense(int accountId, int categoryId ,String expenseName, double expensePrice, String date, int frequency, String lastExpense) {
+        String sql = "INSERT INTO regularExpenses (account_id,category_id,name,price,date, frequency, lastExpense) VALUES (?,?,?,?,?,?,?)";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1,accountId);
+            preparedStatement.setInt(2,categoryId);
+            preparedStatement.setString(3,expenseName);
+            preparedStatement.setDouble(4,expensePrice);
+            preparedStatement.setString(5,date);
+            preparedStatement.setInt(6,frequency);
+            preparedStatement.setString(7,lastExpense);
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+            LOGGER.info("new regular expense added to database");
+        } catch (SQLException exc) {
+            LOGGER.warning("Error occurred: " + exc);
+        }
+    }
+
     //DATABASE UPDATE
 
     /**

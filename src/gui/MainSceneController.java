@@ -5,8 +5,10 @@ import com.jfoenix.controls.*;
 import database.SqliteDb;
 import expenses.Expense;
 import expenses.ExpenseCategory;
+import expenses.RegularExpense;
 import incomes.Income;
 import incomes.IncomeCategory;
+import incomes.RegularIncome;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -69,25 +71,58 @@ public class MainSceneController  {
     @FXML
     private TableView<Income> AllIncomesTable;
     @FXML
-    private TableColumn<Account,String> IncomeNameColumn;
+    private TableColumn<Income,String> IncomeNameColumn;
     @FXML
-    private TableColumn<Account,GregorianCalendar> IncomeDateColumn;
+    private TableColumn<Income,GregorianCalendar> IncomeDateColumn;
     @FXML
-    private TableColumn<Account,Double> IncomeMoneyColumn;
+    private TableColumn<Income,Double> IncomeMoneyColumn;
     @FXML
-    private TableColumn<Account,IncomeCategory> IncomeCategoryColumn;
+    private TableColumn<Income,IncomeCategory> IncomeCategoryColumn;
+
+    //Incomes (regular)
+    @FXML
+    private TableView<RegularIncome> RegIncomesTable;
+    @FXML
+    private TableColumn<Income,String> RegIncomesColumnName;
+    @FXML
+    private TableColumn<Income,GregorianCalendar> RegIncomesColumnDate;
+    @FXML
+    private TableColumn<Income,Double> RegIncomesColumnMoney;
+    @FXML
+    private TableColumn<Income,IncomeCategory> RegIncomesColumnCategory;
+    @FXML
+    private TableColumn<Income,GregorianCalendar> RegIncomesColumnLastIncome;
+    @FXML
+    private TableColumn<Income,Integer> RegIncomesColumnFrequency;
 
     //Expenses
     @FXML
     private TableView<Expense> AllExpenseTable;
     @FXML
-    private TableColumn<Account,String> ExpenseNameColumn;
+    private TableColumn<Expense,String> ExpenseNameColumn;
     @FXML
-    private TableColumn<Account,GregorianCalendar> ExpenseDateColumn;
+    private TableColumn<Expense,GregorianCalendar> ExpenseDateColumn;
     @FXML
-    private TableColumn<Account,Double> ExpensePriceColumn;
+    private TableColumn<Expense,Double> ExpensePriceColumn;
     @FXML
-    private TableColumn<Account, ExpenseCategory> ExpenseCategoryColumn;
+    private TableColumn<Expense, ExpenseCategory> ExpenseCategoryColumn;
+
+    //Expenses (regular)
+    @FXML
+    private TableView<RegularExpense> RegExpenseTable;
+    @FXML
+    private TableColumn<RegularExpense,String> RegExpColumnName;
+    @FXML
+    private TableColumn<RegularExpense,GregorianCalendar> RegExpColumnDate;
+    @FXML
+    private TableColumn<RegularExpense,Double> RegExpColumnPrice;
+    @FXML
+    private TableColumn<RegularExpense,ExpenseCategory> RegExpColumnCategory;
+    @FXML
+    private TableColumn<RegularExpense,String> RegExpColumnLastExpense;
+    @FXML
+    private TableColumn<RegularExpense,Integer> RegExpColumnFrequency;
+
 
     //SETTING TAB'S ELEMENTS
     @FXML
@@ -102,6 +137,8 @@ public class MainSceneController  {
             this.setStatisticTab();
             this.setAllIncomesTable();
             this.setAllExpensesTable();
+            this.setRegExpenseTable();
+            this.setRegIncomesTable();
         } else {
 
         }
@@ -255,13 +292,13 @@ public class MainSceneController  {
             }
         }
         IncomeNameColumn.setCellValueFactory
-                (new PropertyValueFactory<Account, String>("name"));
+                (new PropertyValueFactory<Income, String>("name"));
         IncomeDateColumn.setCellValueFactory
-                (new PropertyValueFactory<Account, GregorianCalendar>("date"));
+                (new PropertyValueFactory<Income, GregorianCalendar>("date"));
         IncomeMoneyColumn.setCellValueFactory
-                (new PropertyValueFactory<Account, Double>("money"));
+                (new PropertyValueFactory<Income, Double>("money"));
         IncomeCategoryColumn.setCellValueFactory
-                (new PropertyValueFactory<Account, IncomeCategory>("category"));
+                (new PropertyValueFactory<Income, IncomeCategory>("category"));
     }
 
     public void removeIncome(){
@@ -289,13 +326,13 @@ public class MainSceneController  {
             }
         }
         ExpenseNameColumn.setCellValueFactory
-                (new PropertyValueFactory<Account, String>("name"));
+                (new PropertyValueFactory<Expense, String>("name"));
         ExpenseDateColumn.setCellValueFactory
-                (new PropertyValueFactory<Account, GregorianCalendar>("date"));
+                (new PropertyValueFactory<Expense, GregorianCalendar>("date"));
         ExpensePriceColumn.setCellValueFactory
-                (new PropertyValueFactory<Account, Double>("price"));
+                (new PropertyValueFactory<Expense, Double>("price"));
         ExpenseCategoryColumn.setCellValueFactory
-                (new PropertyValueFactory<Account, ExpenseCategory>("category"));
+                (new PropertyValueFactory<Expense, ExpenseCategory>("category"));
 
     }
 
@@ -311,6 +348,44 @@ public class MainSceneController  {
         }
         this.refresh();
     }
+
+    private void setRegExpenseTable(){
+        ObservableList<RegularExpense> expensesObservableList = FXCollections.observableArrayList();
+        for(Account account : user.getAccounts()) {
+            for(RegularExpense expense : account.getRegularExpensesList()) {
+                RegExpenseTable.getItems().add(expense);
+                expensesObservableList.add(expense);
+            }
+        }
+        RegExpColumnName.setCellValueFactory(new PropertyValueFactory<RegularExpense, String>("name"));
+        RegExpColumnDate.setCellValueFactory(new PropertyValueFactory<RegularExpense, GregorianCalendar>("date"));
+        RegExpColumnPrice.setCellValueFactory(new PropertyValueFactory<RegularExpense, Double>("price"));
+        RegExpColumnCategory.setCellValueFactory(
+                new PropertyValueFactory<RegularExpense, ExpenseCategory>("category"));
+        RegExpColumnLastExpense.setCellValueFactory(
+                new PropertyValueFactory<RegularExpense, String>("lastExpense"));
+        RegExpColumnFrequency.setCellValueFactory(new PropertyValueFactory<RegularExpense, Integer>("frequency"));
+
+    }
+
+    private void setRegIncomesTable() {
+        ObservableList<RegularIncome> incomesObservableList = FXCollections.observableArrayList();
+        for(Account account : this.user.getAccounts()) {
+            for(RegularIncome income : account.getRegularIncomesList()) {
+                RegIncomesTable.getItems().add(income);
+                incomesObservableList.add(income);
+            }
+        }
+        RegIncomesColumnName.setCellValueFactory(new PropertyValueFactory<Income, String>("name"));
+        RegIncomesColumnDate.setCellValueFactory(new PropertyValueFactory<Income, GregorianCalendar>("date"));
+        RegIncomesColumnMoney.setCellValueFactory(new PropertyValueFactory<Income, Double>("money"));
+        RegIncomesColumnLastIncome.setCellValueFactory(
+                new PropertyValueFactory<Income, GregorianCalendar>("lastIncome"));
+        RegIncomesColumnFrequency.setCellValueFactory(new PropertyValueFactory<Income, Integer>("frequency"));
+        RegIncomesColumnCategory.setCellValueFactory(
+                new PropertyValueFactory<Income, IncomeCategory>("category"));
+    }
+
 
     //SETTING METHODS
 
